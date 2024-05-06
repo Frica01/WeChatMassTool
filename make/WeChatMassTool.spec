@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['main.py'],
+    ['../main.py'],
     pathex=[],
     binaries=[],
-    datas=[('views/resources', 'views/resources')],
+    datas=[('../views/resources', 'views/resources')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -23,7 +23,7 @@ exe = EXE(
     a.datas,
     [],
     name='WeChatMassTool',
-    icon='views/resources/images/favicon.ico',
+    icon='../views/resources/images/favicon.ico',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

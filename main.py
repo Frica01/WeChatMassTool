@@ -3,8 +3,10 @@
 # Author:       小菜
 # Date:         2024/4/01 00:00
 # Description:
-import os
+
+
 import sys
+from ctypes import windll
 
 from PySide6 import QtGui
 from PySide6.QtWidgets import (QApplication, QMessageBox, QWidget)
@@ -12,8 +14,6 @@ from PySide6.QtWidgets import (QApplication, QMessageBox, QWidget)
 from config import PROCESS_NAME
 from controllers import ControllerMain
 from utils import (get_specific_process, get_resource_path)
-
-from ctypes import windll
 
 # 这段代码放在前面即可
 try:
@@ -32,5 +32,3 @@ if __name__ == '__main__':
     else:
         QMessageBox.critical(QWidget(), '报错咯', "微信未启动!")
         sys.exit()  # 退出程序
-
-
