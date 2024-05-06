@@ -8,60 +8,60 @@
 
 </div>
 
-# Î¢ÐÅÈº·¢¹¤¾ß
+# å¾®ä¿¡ç¾¤å‘å·¥å…·
 
-## ?Ä¿Â¼
-- [ÏîÄ¿¼ò½é](#ÏîÄ¿¼ò½é)
-- [¿ìËÙÆô¶¯](#¿ìËÙÆô¶¯)
-- [¶¯Í¼Õ¹Ê¾](#¶¯Í¼Õ¹Ê¾)
-- [Ö§³ÖÏîÄ¿](#Ö§³ÖÏîÄ¿)
-- [ÌØÐÔ](#ÌØÐÔ)
-- [ÏîÄ¿½á¹¹](#ÏîÄ¿½á¹¹)
-- [ÍØÕ¹](#ÍØÕ¹)
-- [ÁªÏµ×÷Õß](#ÁªÏµ×÷Õß)
-- [¹±Ï×](#¹±Ï×)
-- [Ðí¿ÉÖ¤](#Ðí¿ÉÖ¤)
+## ðŸ“–ç›®å½•
+- [é¡¹ç›®ç®€ä»‹](#é¡¹ç›®ç®€ä»‹)
+- [å¿«é€Ÿå¯åŠ¨](#å¿«é€Ÿå¯åŠ¨)
+- [åŠ¨å›¾å±•ç¤º](#åŠ¨å›¾å±•ç¤º)
+- [æ”¯æŒé¡¹ç›®](#æ”¯æŒé¡¹ç›®)
+- [ç‰¹æ€§](#ç‰¹æ€§)
+- [é¡¹ç›®ç»“æž„](#é¡¹ç›®ç»“æž„)
+- [æ‹“å±•](#æ‹“å±•)
+- [è”ç³»ä½œè€…](#è”ç³»ä½œè€…)
+- [è´¡çŒ®](#è´¡çŒ®)
+- [è®¸å¯è¯](#è®¸å¯è¯)
 
-## ?ÏîÄ¿¼ò½é
-Î¢ÐÅÈº·¢ÖúÊÖÊÇÒ»¸ö»ùÓÚ `PySide6` ºÍ `Python` ¿ª·¢µÄ×ÀÃæÓ¦ÓÃ³ÌÐò£¬Ö¼ÔÚ°ïÖúÓÃ»§¸ßÐ§µØÖ´ÐÐÎ¢ÐÅÏûÏ¢µÄÈº·¢ÈÎÎñ¡£ËüÌá¹©ÁËÒ»¸öÓÑºÃµÄÓÃ»§½çÃæ£¬Ö§³Öµ¼ÈëÈº·¢Ãûµ¥ºÍµ¼³öÔËÐÐ½á¹û¡£
+## â­é¡¹ç›®ç®€ä»‹
+å¾®ä¿¡ç¾¤å‘åŠ©æ‰‹æ˜¯ä¸€ä¸ªåŸºäºŽ `PySide6` å’Œ `Python` å¼€å‘çš„æ¡Œé¢åº”ç”¨ç¨‹åºï¼Œæ—¨åœ¨å¸®åŠ©ç”¨æˆ·é«˜æ•ˆåœ°æ‰§è¡Œå¾®ä¿¡æ¶ˆæ¯çš„ç¾¤å‘ä»»åŠ¡ã€‚å®ƒæä¾›äº†ä¸€ä¸ªå‹å¥½çš„ç”¨æˆ·ç•Œé¢ï¼Œæ”¯æŒå¯¼å…¥ç¾¤å‘åå•å’Œå¯¼å‡ºè¿è¡Œç»“æžœã€‚
 
-## ?¿ìËÙÆô¶¯
->±¾ÏîÄ¿Ê¹ÓÃ `Python` ºÍ `PySide6`£¬È·±£ÄãÒÑ¾­°²×°ÁË `Python 3.12+` ºÍ `PySide6`
+## âš¡å¿«é€Ÿå¯åŠ¨
+>æœ¬é¡¹ç›®ä½¿ç”¨ `Python` å’Œ `PySide6`ï¼Œç¡®ä¿ä½ å·²ç»å®‰è£…äº† `Python 3.12+` å’Œ `PySide6`
 
 <br>
 
-1. ¿ËÂ¡²Ö¿âµ½±¾µØ
+1. å…‹éš†ä»“åº“åˆ°æœ¬åœ°
    ```bash
    git clone https://github.com/Frica01/PinnacleQt_GUI_PySide6_PyQt6.git
    ```
 <br>
 
-2. °²×°ÒÀÀµ»·¾³
+2. å®‰è£…ä¾èµ–çŽ¯å¢ƒ
    ```bash
    pip install -r requirements.txt
    ```
 <br>
 
-3. ÔËÐÐÓ¦ÓÃ
+3. è¿è¡Œåº”ç”¨
    ```bash
    python main.py
    ```
 
-## ?¶¯Í¼Õ¹Ê¾
+## âœ¨åŠ¨å›¾å±•ç¤º
 
 <details>
-<summary><b>Õ¹¿ª</b></summary>
+<summary><b>å±•å¼€</b></summary>
 
 
-### Æô¶¯½çÃæ
+### å¯åŠ¨ç•Œé¢
 
 <img src="assets/program_launch.gif" alt="program_launch"/>
 
-### »ù±¾Õ¹Ê¾
+### åŸºæœ¬å±•ç¤º
 
 <img src="assets/program_animation.gif" alt="assets%2Fprogram_animation"/>
 
-### ÔËÐÐÕ¹Ê¾
+### è¿è¡Œå±•ç¤º
 
 <img src="assets/program_running.gif" alt="assets%program_running"/>
 
@@ -69,106 +69,106 @@
 
 </details>
 
-## ?Ö§³ÖÏîÄ¿
+## ðŸ§æ”¯æŒé¡¹ç›®
 
-Èç¹ûÄú¾õµÃÕâ¸öÏîÄ¿ÓÐÓÃ£¬²»·Á¸øËüÒ»¸ö??£¨`Star`£©¡£`Star`¶ÔÎÒÀ´ËµÊÇÒ»ÖÖ¹ÄÀø£¬Ò²ÄÜ°ïÖú¸ü¶àµÄ¿ª·¢Õß·¢ÏÖÕâ¸ö¹¤¾ß¡£
+å¦‚æžœæ‚¨è§‰å¾—è¿™ä¸ªé¡¹ç›®æœ‰ç”¨ï¼Œä¸å¦¨ç»™å®ƒä¸€ä¸ª??ï¼ˆ`Star`ï¼‰ã€‚`Star`å¯¹æˆ‘æ¥è¯´æ˜¯ä¸€ç§é¼“åŠ±ï¼Œä¹Ÿèƒ½å¸®åŠ©æ›´å¤šçš„å¼€å‘è€…å‘çŽ°è¿™ä¸ªå·¥å…·ã€‚
 
-Èç¹ûÄúÏ£Íû¸ú×Ù×îÐÂµÄ¸üÐÂºÍ¸Ä½ø£¬Çë`Fork`?±¾ÏîÄ¿¡£`Fork`¿ÉÒÔÈÃÄú±£³Ö¶ÔÏîÄ¿¸üÐÂµÄÍ¬²½£¬²¢ÓÐ»ú»á¹±Ï××Ô¼ºµÄ¸Ä½øºÍÐÂ¹¦ÄÜ¡£
+å¦‚æžœæ‚¨å¸Œæœ›è·Ÿè¸ªæœ€æ–°çš„æ›´æ–°å’Œæ”¹è¿›ï¼Œè¯·`Fork`?æœ¬é¡¹ç›®ã€‚`Fork`å¯ä»¥è®©æ‚¨ä¿æŒå¯¹é¡¹ç›®æ›´æ–°çš„åŒæ­¥ï¼Œå¹¶æœ‰æœºä¼šè´¡çŒ®è‡ªå·±çš„æ”¹è¿›å’Œæ–°åŠŸèƒ½ã€‚
 
-## ÌØÐÔ
-<font size=6 color=Violet>¼òÒªËµÃ÷£º</font>
-- **²ÉÓÃ MVC ¼Ü¹¹**£ºÍ¨¹ýÄ£ÐÍ£¨Model£©¡¢ÊÓÍ¼£¨View£©ºÍ¿ØÖÆÆ÷£¨Controller£©µÄ·ÖÀë£¬ÊµÏÖÁËÂß¼­Óë½çÃæµÄ½âñî£¬ÎªÏîÄ¿µÄºóÐøÎ¬»¤ºÍÀ©Õ¹´òÏÂÁË¼áÊµ»ù´¡¡£
-- **Ò×ÓÚÀ©Õ¹**£ºMVC¼Ü¹¹Éè¼ÆÈÃÌí¼ÓÐÂ¹¦ÄÜ±äµÃ¸ü¼ÓÈÝÒ×ºÍÖ±½Ó£¬ÎÞÐèÐÞ¸Ä´óÁ¿ÏÖÓÐ´úÂë¼´¿ÉÊµÏÖ¹¦ÄÜµÄÀ©Õ¹¡£
-- **¹¦ÄÜ³éÏó»¯**£º½«ÏîÄ¿ÖÐµÄ³£ÓÃ¹¦ÄÜºÍ×é¼þ³éÏó³É¶ÀÁ¢µÄÄ£¿éºÍº¯Êý£¬Ìá¸ßÁË´úÂëµÄ¸´ÓÃÐÔ£¬Í¬Ê±Ò²¼ò»¯ÁË¹¦ÄÜµÄÐÞ¸ÄºÍÉý¼¶¹ý³Ì¡£
+## ç‰¹æ€§
+<font size=6 color=Violet>ç®€è¦è¯´æ˜Žï¼š</font>
+- **é‡‡ç”¨ MVC æž¶æž„**ï¼šé€šè¿‡æ¨¡åž‹ï¼ˆModelï¼‰ã€è§†å›¾ï¼ˆViewï¼‰å’ŒæŽ§åˆ¶å™¨ï¼ˆControllerï¼‰çš„åˆ†ç¦»ï¼Œå®žçŽ°äº†é€»è¾‘ä¸Žç•Œé¢çš„è§£è€¦ï¼Œä¸ºé¡¹ç›®çš„åŽç»­ç»´æŠ¤å’Œæ‰©å±•æ‰“ä¸‹äº†åšå®žåŸºç¡€ã€‚
+- **æ˜“äºŽæ‰©å±•**ï¼šMVCæž¶æž„è®¾è®¡è®©æ·»åŠ æ–°åŠŸèƒ½å˜å¾—æ›´åŠ å®¹æ˜“å’Œç›´æŽ¥ï¼Œæ— éœ€ä¿®æ”¹å¤§é‡çŽ°æœ‰ä»£ç å³å¯å®žçŽ°åŠŸèƒ½çš„æ‰©å±•ã€‚
+- **åŠŸèƒ½æŠ½è±¡åŒ–**ï¼šå°†é¡¹ç›®ä¸­çš„å¸¸ç”¨åŠŸèƒ½å’Œç»„ä»¶æŠ½è±¡æˆç‹¬ç«‹çš„æ¨¡å—å’Œå‡½æ•°ï¼Œæé«˜äº†ä»£ç çš„å¤ç”¨æ€§ï¼ŒåŒæ—¶ä¹Ÿç®€åŒ–äº†åŠŸèƒ½çš„ä¿®æ”¹å’Œå‡çº§è¿‡ç¨‹ã€‚
 
 
-<font color='bluesky' size=6>ÒÑ¿ª·¢£º</font>
--[x] **ÓÃ»§ÓÑºÃµÄ½çÃæ**£º»ùÓÚ `PySide6`£¬ÓµÓÐÏÖ´ú»¯µÄ½çÃæºÍÁ÷³©µÄÓÃ»§ÌåÑé¡£
--[x] **ÖÇÄÜÈº·¢**£º¿ÉÒÔ¸ù¾ÝÓÃ»§ÉèÖÃµÄ±êÇ©»òÈº×é½øÐÐÖÇÄÜÈº·¢¡£
--[x] **·á¸»µÄÏûÏ¢ÄÚÈÝ**£ºÖ§³ÖÎÄ±¾¡¢Í¼Æ¬¡¢ÎÄ¼þµÈ¶àÖÖÀàÐÍµÄÏûÏ¢ÄÚÈÝ¡£
--[x] **ÈÕÖ¾¼ÇÂ¼**£ºÏêÏ¸¼ÇÂ¼Ã¿´Î·¢ËÍµÄ½á¹û£¬·½±ãÓÃ»§»Ø²é¡£
+<font color='bluesky' size=6>å·²å¼€å‘ï¼š</font>
+-[x] **ç”¨æˆ·å‹å¥½çš„ç•Œé¢**ï¼šåŸºäºŽ `PySide6`ï¼Œæ‹¥æœ‰çŽ°ä»£åŒ–çš„ç•Œé¢å’Œæµç•…çš„ç”¨æˆ·ä½“éªŒã€‚
+-[x] **æ™ºèƒ½ç¾¤å‘**ï¼šå¯ä»¥æ ¹æ®ç”¨æˆ·è®¾ç½®çš„æ ‡ç­¾æˆ–ç¾¤ç»„è¿›è¡Œæ™ºèƒ½ç¾¤å‘ã€‚
+-[x] **ä¸°å¯Œçš„æ¶ˆæ¯å†…å®¹**ï¼šæ”¯æŒæ–‡æœ¬ã€å›¾ç‰‡ã€æ–‡ä»¶ç­‰å¤šç§ç±»åž‹çš„æ¶ˆæ¯å†…å®¹ã€‚
+-[x] **æ—¥å¿—è®°å½•**ï¼šè¯¦ç»†è®°å½•æ¯æ¬¡å‘é€çš„ç»“æžœï¼Œæ–¹ä¾¿ç”¨æˆ·å›žæŸ¥ã€‚
 
-<font color='red' size=6>´ý¿ª·¢£º</font>
--[ ] **ÏûÏ¢Ä£°å**£ºÔö¼Ó¸ü¶à×Ô¶¨ÒåÏûÏ¢Ä£°å¡£
--[ ] **ÏûÏ¢¶¨Ê±**£ºÏûÏ¢µÄ¶¨Ê±·¢ËÍ¹¦ÄÜ¡£
+<font color='red' size=6>å¾…å¼€å‘ï¼š</font>
+-[ ] **æ¶ˆæ¯æ¨¡æ¿**ï¼šå¢žåŠ æ›´å¤šè‡ªå®šä¹‰æ¶ˆæ¯æ¨¡æ¿ã€‚
+-[ ] **æ¶ˆæ¯å®šæ—¶**ï¼šæ¶ˆæ¯çš„å®šæ—¶å‘é€åŠŸèƒ½ã€‚
 
-## ÏîÄ¿½á¹¹
+## é¡¹ç›®ç»“æž„
 
 <details>
-<summary><b>Õ¹¿ª</b></summary>
+<summary><b>å±•å¼€</b></summary>
 
 ```md
 WeChatMassTool/
-©À©¤©¤ assets/              # Õ¹Ê¾Í¼Æ¬
-©À©¤©¤ config/              # Ó¦ÓÃÅäÖÃÏà¹ØÎÄ¼þ
-©¦   ©À©¤©¤ __init__.py
-©¦   ©¸©¤©¤ config.py        # Ó¦ÓÃµÄÈ«¾ÖÅäÖÃÉèÖÃ
-©À©¤©¤ controllers/         # MVC ÖÐµÄ¿ØÖÆÆ÷×é¼þ
-©¦   ©À©¤©¤ __init__.py
-©¦   ©¸©¤©¤ controller_main.py
-©À©¤©¤ make/                # pyinstaller´ò°üÎÄ¼þ
-©À©¤©¤ models/              # MVC ÖÐµÄÄ£ÐÍ×é¼þ£¬´¦ÀíÊý¾ÝÂß¼­
-©¦   ©À©¤©¤ __init__.py
-©¦   ©À©¤©¤ model_generator_csv.py
-©¦   ©¸©¤©¤ model_main.py
-©À©¤©¤ tests/               # µ¥Ôª²âÊÔºÍ¹¦ÄÜ²âÊÔÎÄ¼þ
-©¦   ©À©¤©¤ __init__.py
-©¦   ©¸©¤©¤ test.py
-©À©¤©¤ utils/
-©¦   ©À©¤©¤ __init__.py
-©¦   ©À©¤©¤ utils.py
-©¦   ©À©¤©¤ wx_operation.py
-©¦   ©¸©¤©¤ wx_operation.py.bak
-©À©¤©¤ views/               # MVC ÖÐµÄÊÓÍ¼×é¼þ£¬ÓÃ»§½çÃæÎÄ¼þ
-©¦   ©À©¤©¤ resources/       # UI ×ÊÔ´£¬ÈçÍ¼±ê¡¢Í¼Æ¬µÈ
-©¦   ©¦   ©À©¤©¤ icons/
-©¦   ©¦   ©À©¤©¤ images/
-©¦   ©¦   ©À©¤©¤ svgs/
-©¦   ©¦   ©À©¤©¤ themes/      # UI Ö÷ÌâÎÄ¼þ
-©¦   ©¦   ©À©¤©¤ ui_files/    # Qt Designer UI ÎÄ¼þ
-©¦   ©¦   ©¸©¤©¤ resources.qrc
-©¦   ©À©¤©¤ ui_components/   # ÖØÓÃµÄUI×é¼þºÍÂß¼­
-©¦   ©¦   ©À©¤©¤ __init__.py
-©¦   ©¦   ©À©¤©¤ animations.py  # ¶¯»­Ð§¹ûÊµÏÖ
-©¦   ©¦   ©¸©¤©¤ ui_setup.py    # UIÉèÖÃºÍ³õÊ¼»¯
-©¦   ©À©¤©¤ ui_designs/      # UI Éè¼ÆÎÄ¼þ£¬»ùÓÚPySide6×Ô¶¯Éú³ÉµÄPythonÎÄ¼þ
-©¦   ©¦   ©À©¤©¤ __init__.py
-©¦   ©¦   ©À©¤©¤ resources_rc.py
-©¦   ©¦   ©À©¤©¤ ui_login.py    # µÇÂ¼½çÃæUIÉè¼Æ
-©¦   ©¦   ©¸©¤©¤ ui_main.py     # Ö÷½çÃæUIÉè¼Æ
-©¦   ©À©¤©¤ widgets/         # ×Ô¶¨ÒåµÄQt Widgets
-©¦   ©¦   ©À©¤©¤ __init__.py
-©¦   ©¦   ©À©¤©¤ custom_grips.py  # ×Ô¶¨Òå´°¿Úµ÷Õû´óÐ¡¿Ø¼þ
-©¦   ©¦   ©À©¤©¤ login_window.py  # µÇÂ¼´°¿ÚÊµÏÖ
-©¦   ©¦   ©¸©¤©¤ main_window.py   # Ö÷´°¿ÚÊµÏÖ
-©¦   ©À©¤©¤ __init__.py
-©¦   ©¸©¤©¤ view_main.py     # Ö÷ÊÓÍ¼¹ÜÀíÆ÷£¬¸ºÔðÕûºÏºÍ¹ÜÀíÓ¦ÓÃµÄËùÓÐÊÓÍ¼
-©À©¤©¤ LICENSE
-©À©¤©¤ README.md
-©À©¤©¤ main.py              # Ó¦ÓÃ³ÌÐòµÄÈë¿ÚÎÄ¼þ
-©¸©¤©¤ requirements.txt
+â”œâ”€â”€ assets/              # å±•ç¤ºå›¾ç‰‡
+â”œâ”€â”€ config/              # åº”ç”¨é…ç½®ç›¸å…³æ–‡ä»¶
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â””â”€â”€ config.py        # åº”ç”¨çš„å…¨å±€é…ç½®è®¾ç½®
+â”œâ”€â”€ controllers/         # MVC ä¸­çš„æŽ§åˆ¶å™¨ç»„ä»¶
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â””â”€â”€ controller_main.py
+â”œâ”€â”€ make/                # pyinstalleræ‰“åŒ…æ–‡ä»¶
+â”œâ”€â”€ models/              # MVC ä¸­çš„æ¨¡åž‹ç»„ä»¶ï¼Œå¤„ç†æ•°æ®é€»è¾‘
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â”œâ”€â”€ model_generator_csv.py
+â”‚   â””â”€â”€ model_main.py
+â”œâ”€â”€ tests/               # å•å…ƒæµ‹è¯•å’ŒåŠŸèƒ½æµ‹è¯•æ–‡ä»¶
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â””â”€â”€ test.py
+â”œâ”€â”€ utils/
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â”œâ”€â”€ utils.py
+â”‚   â”œâ”€â”€ wx_operation.py
+â”‚   â””â”€â”€ wx_operation.py.bak
+â”œâ”€â”€ views/               # MVC ä¸­çš„è§†å›¾ç»„ä»¶ï¼Œç”¨æˆ·ç•Œé¢æ–‡ä»¶
+â”‚   â”œâ”€â”€ resources/       # UI èµ„æºï¼Œå¦‚å›¾æ ‡ã€å›¾ç‰‡ç­‰
+â”‚   â”‚   â”œâ”€â”€ icons/
+â”‚   â”‚   â”œâ”€â”€ images/
+â”‚   â”‚   â”œâ”€â”€ svgs/
+â”‚   â”‚   â”œâ”€â”€ themes/      # UI ä¸»é¢˜æ–‡ä»¶
+â”‚   â”‚   â”œâ”€â”€ ui_files/    # Qt Designer UI æ–‡ä»¶
+â”‚   â”‚   â””â”€â”€ resources.qrc
+â”‚   â”œâ”€â”€ ui_components/   # é‡ç”¨çš„UIç»„ä»¶å’Œé€»è¾‘
+â”‚   â”‚   â”œâ”€â”€ __init__.py
+â”‚   â”‚   â”œâ”€â”€ animations.py  # åŠ¨ç”»æ•ˆæžœå®žçŽ°
+â”‚   â”‚   â””â”€â”€ ui_setup.py    # UIè®¾ç½®å’Œåˆå§‹åŒ–
+â”‚   â”œâ”€â”€ ui_designs/      # UI è®¾è®¡æ–‡ä»¶ï¼ŒåŸºäºŽPySide6è‡ªåŠ¨ç”Ÿæˆçš„Pythonæ–‡ä»¶
+â”‚   â”‚   â”œâ”€â”€ __init__.py
+â”‚   â”‚   â”œâ”€â”€ resources_rc.py
+â”‚   â”‚   â”œâ”€â”€ ui_login.py    # ç™»å½•ç•Œé¢UIè®¾è®¡
+â”‚   â”‚   â””â”€â”€ ui_main.py     # ä¸»ç•Œé¢UIè®¾è®¡
+â”‚   â”œâ”€â”€ widgets/         # è‡ªå®šä¹‰çš„Qt Widgets
+â”‚   â”‚   â”œâ”€â”€ __init__.py
+â”‚   â”‚   â”œâ”€â”€ custom_grips.py  # è‡ªå®šä¹‰çª—å£è°ƒæ•´å¤§å°æŽ§ä»¶
+â”‚   â”‚   â”œâ”€â”€ login_window.py  # ç™»å½•çª—å£å®žçŽ°
+â”‚   â”‚   â””â”€â”€ main_window.py   # ä¸»çª—å£å®žçŽ°
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â””â”€â”€ view_main.py     # ä¸»è§†å›¾ç®¡ç†å™¨ï¼Œè´Ÿè´£æ•´åˆå’Œç®¡ç†åº”ç”¨çš„æ‰€æœ‰è§†å›¾
+â”œâ”€â”€ LICENSE
+â”œâ”€â”€ README.md
+â”œâ”€â”€ main.py              # åº”ç”¨ç¨‹åºçš„å…¥å£æ–‡ä»¶
+â””â”€â”€ requirements.txt
 
 ```
 </details>
 
-## ÍØÕ¹
-´ËÏîÄ¿Ä¿Ç°Ö§³Ö»ù´¡µÄÈº·¢¹¦ÄÜ£¬Î´À´µÄ°æ±¾¼Æ»®°üÀ¨£º
-- Ôö¼Ó¸ü¶à×Ô¶¨ÒåÏûÏ¢Ä£°å¡£
-- ÓÃ»§ÐÐÎª·ÖÎöºÍÊ¹ÓÃ·´À¡¹¦ÄÜ£¬ÓÃÓÚ¸ÄÉÆÓ¦ÓÃÐÔÄÜºÍÓÃ»§ÌåÑé¡£
+## æ‹“å±•
+æ­¤é¡¹ç›®ç›®å‰æ”¯æŒåŸºç¡€çš„ç¾¤å‘åŠŸèƒ½ï¼Œæœªæ¥çš„ç‰ˆæœ¬è®¡åˆ’åŒ…æ‹¬ï¼š
+- å¢žåŠ æ›´å¤šè‡ªå®šä¹‰æ¶ˆæ¯æ¨¡æ¿ã€‚
+- ç”¨æˆ·è¡Œä¸ºåˆ†æžå’Œä½¿ç”¨åé¦ˆåŠŸèƒ½ï¼Œç”¨äºŽæ”¹å–„åº”ç”¨æ€§èƒ½å’Œç”¨æˆ·ä½“éªŒã€‚
 
-## ??ÁªÏµ×÷Õß
-Èç¹ûÄúÓÐÈÎºÎÎÊÌâ»òÕßÏëÒª¸ü¶àµØÁË½âÏîÄ¿£¬»¶Ó­Í¨¹ýÒÔÏÂ·½Ê½ÁªÏµÎÒ£º
-- Î¢ÐÅ¹«ÖÚºÅ£ºÐ¡²ËµÄPythonÔÓ»õÆÌ [É¨Âë¹Ø×¢¹«ÖÚºÅ](./assets/WeChat_Official_Account.jpg)
-- QQÈºÁÄ£º[É¨Âë¼ÓÈëÈºÁÄ](./assets/QQ_group.png)
-- ÔÚGitHubÉÏ [Ìá½»Issue](https://github.com/Frica01/WeChatMassTool/issues)
+## â˜Žï¸è”ç³»ä½œè€…
+å¦‚æžœæ‚¨æœ‰ä»»ä½•é—®é¢˜æˆ–è€…æƒ³è¦æ›´å¤šåœ°äº†è§£é¡¹ç›®ï¼Œæ¬¢è¿Žé€šè¿‡ä»¥ä¸‹æ–¹å¼è”ç³»æˆ‘ï¼š
+- å¾®ä¿¡å…¬ä¼—å·ï¼šå°èœçš„Pythonæ‚è´§é“º [æ‰«ç å…³æ³¨å…¬ä¼—å·](./assets/WeChat_Official_Account.jpg)
+- QQç¾¤èŠï¼š[æ‰«ç åŠ å…¥ç¾¤èŠ](./assets/QQ_group.png)
+- åœ¨GitHubä¸Š [æäº¤Issue](https://github.com/Frica01/WeChatMassTool/issues)
 
-## ¹±Ï×
-±¾ÏîÄ¿µÄÁé¸ÐÀ´Ô´×Ô [**Frica01**](https://github.com/Frica01) µÄ´´ÒâºÍ¹±Ï×£¬ÎÒ¶ÔËûÔÚ¿ªÔ´ÉçÇøµÄ¹¤×÷±íÊ¾ÓÉÖÔµÄ¾°ÒÔºÍ¸ÐÐ»¡£±¾ÏîÄ¿»ùÓÚÒÔÏÂÁ½¸öÏîÄ¿µÄÖØ¹¹¡£
+## è´¡çŒ®
+æœ¬é¡¹ç›®çš„çµæ„Ÿæ¥æºè‡ª [**Frica01**](https://github.com/Frica01) çš„åˆ›æ„å’Œè´¡çŒ®ï¼Œæˆ‘å¯¹ä»–åœ¨å¼€æºç¤¾åŒºçš„å·¥ä½œè¡¨ç¤ºç”±è¡·çš„æ™¯ä»¥å’Œæ„Ÿè°¢ã€‚æœ¬é¡¹ç›®åŸºäºŽä»¥ä¸‹ä¸¤ä¸ªé¡¹ç›®çš„é‡æž„ã€‚
 - [https://github.com/Frica01/WeChat-mass-msg](https://github.com/Frica01/WeChat-mass-msg)
 - [https://github.com/Frica01/PinnacleQt_GUI_PySide6_PyQt6](https://github.com/Frica01/PinnacleQt_GUI_PySide6_PyQt6)
 
 
-»¶Ó­¶ÔÏîÄ¿¸ÐÐËÈ¤µÄ¿ª·¢ÕßÍ¨¹ý [Pull Requests](https://github.com/Frica01/WeChatMassTool/pulls) »ò [Issues](https://github.com/Frica01/WeChatMassTool/issues) Ìá½»ÄúµÄ¹±Ï×»ò·´À¡¡£
+æ¬¢è¿Žå¯¹é¡¹ç›®æ„Ÿå…´è¶£çš„å¼€å‘è€…é€šè¿‡ [Pull Requests](https://github.com/Frica01/WeChatMassTool/pulls) æˆ– [Issues](https://github.com/Frica01/WeChatMassTool/issues) æäº¤æ‚¨çš„è´¡çŒ®æˆ–åé¦ˆã€‚
 
-## Ðí¿ÉÖ¤
-¸ÃÏîÄ¿ÔÚ MIT Ðí¿ÉÖ¤ÏÂ¿ªÔ´¡£¸ü¶àÏêÇéÇë²éÔÄ GitHub ²Ö¿âÖÐ [LICENSE](LICENSE) ÎÄ¼þ¡£
+## è®¸å¯è¯
+è¯¥é¡¹ç›®åœ¨ MIT è®¸å¯è¯ä¸‹å¼€æºã€‚æ›´å¤šè¯¦æƒ…è¯·æŸ¥é˜… GitHub ä»“åº“ä¸­ [LICENSE](LICENSE) æ–‡ä»¶ã€‚
