@@ -1,25 +1,23 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainVwYwrk.ui'
+## Form generated from reading UI file 'mainuEqyhg.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.6.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QLineEdit, QListWidget,
-    QListWidgetItem, QMainWindow, QProgressBar, QPushButton,
-    QRadioButton, QSizePolicy, QStackedWidget, QTextEdit,
-    QVBoxLayout, QWidget)
+from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
+                            QSize, Qt)
+from PySide6.QtGui import (QCursor,
+                           QFont, QIcon)
+from PySide6.QtWidgets import (QComboBox, QFrame, QGridLayout,
+                               QHBoxLayout, QLabel, QLineEdit, QListWidget,
+                               QProgressBar, QPushButton,
+                               QRadioButton, QSizePolicy, QStackedWidget, QTextEdit,
+                               QVBoxLayout, QWidget)
+
 from . resources_rc import *
 
 class Ui_MainWindow(object):
@@ -751,7 +749,9 @@ class Ui_MainWindow(object):
         self.extraTopMenu.setFrameShape(QFrame.NoFrame)
         self.extraTopMenu.setFrameShadow(QFrame.Raised)
         self.verticalLayout_11 = QVBoxLayout(self.extraTopMenu)
+        self.verticalLayout_11.setSpacing(0)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
+        self.verticalLayout_11.setContentsMargins(-1, 6, -1, 6)
         self.frame_9 = QFrame(self.extraTopMenu)
         self.frame_9.setObjectName(u"frame_9")
         self.frame_9.setMinimumSize(QSize(0, 45))
@@ -822,6 +822,35 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout_11.addWidget(self.frame_4, 0, Qt.AlignLeft)
+
+        self.frame_15 = QFrame(self.extraTopMenu)
+        self.frame_15.setObjectName(u"frame_15")
+        self.frame_15.setMinimumSize(QSize(0, 45))
+        self.frame_15.setFrameShape(QFrame.StyledPanel)
+        self.frame_15.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_11 = QHBoxLayout(self.frame_15)
+        self.horizontalLayout_11.setSpacing(20)
+        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.horizontalLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.label_5 = QLabel(self.frame_15)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setMaximumSize(QSize(100, 16777215))
+
+        self.horizontalLayout_11.addWidget(self.label_5, 0, Qt.AlignLeft)
+
+        self.radio_btn_animate_true = QRadioButton(self.frame_15)
+        self.radio_btn_animate_true.setObjectName(u"radio_btn_animate_true")
+        self.radio_btn_animate_true.setChecked(True)
+
+        self.horizontalLayout_11.addWidget(self.radio_btn_animate_true)
+
+        self.radio_btn_animate_false = QRadioButton(self.frame_15)
+        self.radio_btn_animate_false.setObjectName(u"radio_btn_animate_false")
+
+        self.horizontalLayout_11.addWidget(self.radio_btn_animate_false)
+
+
+        self.verticalLayout_11.addWidget(self.frame_15, 0, Qt.AlignLeft)
 
         self.frame_5 = QFrame(self.extraTopMenu)
         self.frame_5.setObjectName(u"frame_5")
@@ -1663,6 +1692,9 @@ class Ui_MainWindow(object):
         self.cb_file_interval.setItemText(8, QCoreApplication.translate("MainWindow", u"4.5", None))
         self.cb_file_interval.setItemText(9, QCoreApplication.translate("MainWindow", u"5.0", None))
 
+        self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u662f\u5426\u52a8\u753b\u542f\u52a8", None))
+        self.radio_btn_animate_true.setText(QCoreApplication.translate("MainWindow", u"\u662f", None))
+        self.radio_btn_animate_false.setText(QCoreApplication.translate("MainWindow", u"\u5426", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u5bfc\u5165\u597d\u53cb\u540d\u5355", None))
         self.btn_import_name_list.setText(QCoreApplication.translate("MainWindow", u"Open", None))
         self.textEdit.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

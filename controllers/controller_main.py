@@ -9,7 +9,8 @@ from PySide6.QtCore import (QObject, QMutexLocker, QMutex, QWaitCondition)
 from PySide6.QtWidgets import (QFileDialog, QMessageBox)
 
 from models import ModelMain
-from utils import read_file
+from utils import (read_file, write_config)
+from config import (APP_NAME, SECTION, OPTION)
 from views import ViewMain
 
 
@@ -27,6 +28,7 @@ class ControllerMain(QObject):
         #
         self.setup_connections()
         self.name_list = list()
+        self.init_animate_radio_btn(flag=animate_on_startup)
 
     def setup_connections(self):
         # 发送消息
@@ -47,6 +49,9 @@ class ControllerMain(QObject):
         self.view.add_list_widget_menu()
         #
         self.view.updatedProgressSignal.connect(self.view.update_progress)
+        #
+        self.view.radio_btn_animate_true.clicked.connect(self.set_animate_startup_status)
+        self.view.radio_btn_animate_false.clicked.connect(self.set_animate_startup_status)
 
     def get_gui_info(self):
         single_text = self.view.single_line_msg_text_edit.toPlainText()
@@ -131,3 +136,19 @@ class ControllerMain(QObject):
         """清空 全部 控件"""
         self.view.clear_all_text_edit()
         self.name_list = list()
+
+    def init_animate_radio_btn(self, flag):
+        if flag:
+            self.view.radio_btn_animate_true.click()
+        else:
+            self.view.radio_btn_animate_false.click()
+
+    def set_animate_startup_status(self):
+        # print('true ==>', self.view.radio_btn_animate_true.isChecked())
+        # print('false ==>', self.view.radio_btn_animate_false.isChecked())
+        if value := self.view.radio_btn_animate_true.isChecked():
+            print(str(value), value)
+            write_config(APP_NAME, SECTION, OPTION, value=str(True))
+        else:
+            print(str(not value), not value)
+            write_config(APP_NAME, SECTION, OPTION, value=str(False))

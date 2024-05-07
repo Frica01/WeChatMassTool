@@ -11,9 +11,9 @@ from ctypes import windll
 from PySide6 import QtGui
 from PySide6.QtWidgets import (QApplication, QMessageBox, QWidget)
 
-from config import PROCESS_NAME
+from config import (PROCESS_NAME, APP_NAME, SECTION, OPTION)
 from controllers import ControllerMain
-from utils import (get_specific_process, get_resource_path)
+from utils import (get_specific_process, get_resource_path, get_config)
 
 # 这段代码放在前面即可
 try:
@@ -24,10 +24,12 @@ except ImportError:
 
 
 if __name__ == '__main__':
+
     app = QApplication()
-    app.setWindowIcon(QtGui.QIcon(get_resource_path(r'views/resources/images/微信-4.png')))
+    app.setWindowIcon(QtGui.QIcon(get_resource_path(r'views/resources/images/favicon.ico')))
     if get_specific_process(proc_name=PROCESS_NAME):
-        controller = ControllerMain(animate_on_startup=True)
+        # 获取默认配置, 看是否需要以动画形式启动
+        controller = ControllerMain(animate_on_startup=get_config(APP_NAME, section=SECTION, option=OPTION))
         sys.exit(app.exec())
     else:
         QMessageBox.critical(QWidget(), '报错咯', "微信未启动!")

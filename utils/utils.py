@@ -5,9 +5,11 @@
 # Description:
 
 import ctypes
-import os.path
+import os
 import sys
 from ctypes import wintypes
+from configparser import ConfigParser
+from pathlib import Path
 
 import chardet
 import psutil
@@ -107,3 +109,61 @@ def get_resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
+
+
+def get_user_config_dir(app_name):
+    # 根据操作系统不同，返回用户的配置目录
+    if os.name == "nt":
+        # Windows
+        return Path.home() / "AppData" / "Local" / app_name
+    else:
+        # Unix-like
+        return Path.home() / ".config" / app_name
+
+
+def create_default_config(config_path):
+    # 创建ConfigParser对象
+    config = ConfigParser()
+    # 创建一个新的config文件，并添加一个section
+    config['DEFAULT'] = {}
+    # 添加一个字段 animation=False 到 DEFAULT section
+    config.set('DEFAULT', 'animate_on_startup', 'True')
+    # 将配置项写入文件
+    with open(config_path, 'w') as configfile:
+        config.write(configfile)
+
+
+def get_config(app_name, section='DEFAULT', option=None):
+    # 使用示例
+    config_dir = get_user_config_dir(app_name)
+    config_path = config_dir / "config.ini"
+
+    if not config_dir.exists():
+        config_dir.mkdir(parents=True, exist_ok=True)  # exist_ok 避免重复创建时的错误
+
+    # 确保配置文件存在，如果不存在则创建或复制默认配置
+    if not config_path.exists():
+        create_default_config(config_path)
+
+    # 读取配置文件
+    config = ConfigParser()
+    config.read(config_path)
+    return config.getboolean(section, option=option)
+
+
+def write_config(app_name, section, option, value):
+    # 使用示例
+    config_dir = get_user_config_dir(app_name)
+    config_path = config_dir / "config.ini"
+
+    # 读取或创建 ConfigParser 对象
+    config = ConfigParser()
+    if not config.read(config_path):
+        create_default_config(config_path=config_path)
+
+    # 设置或更新配置项的值
+    config.set(section, option, value)
+
+    # 将更新后的配置写回文件
+    with open(config_path, 'w') as configfile:
+        config.write(configfile)

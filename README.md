@@ -32,7 +32,7 @@
 
 1. 克隆仓库到本地
    ```bash
-   git clone https://github.com/Frica01/PinnacleQt_GUI_PySide6_PyQt6.git
+   git clone https://github.com/Frica01/WeChatMassTool.git
    ```
 <br>
 

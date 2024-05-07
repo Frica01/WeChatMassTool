@@ -5,6 +5,9 @@
 # Description:
 
 PROCESS_NAME = 'WeChat.exe'
+APP_NAME = 'WeChatMassTool'
+SECTION = 'DEFAULT'
+OPTION = 'animate_on_startup'
 
 
 class AutomationConfig:
