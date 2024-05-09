@@ -158,7 +158,7 @@ WeChatMassTool/
 - 增加更多自定义消息模板。
 - 用户行为分析和使用反馈功能，用于改善应用性能和用户体验。
 
-## ☎️联系作者
+## ☎联系作者
 如果您有任何问题或者想要更多地了解项目，欢迎通过以下方式联系我：
 - 微信公众号：小菜的Python杂货铺 [扫码关注公众号](./assets/WeChat_Official_Account.jpg)
 - QQ群聊：[扫码加入群聊](./assets/QQ_group.png)
