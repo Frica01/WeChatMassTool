@@ -110,7 +110,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # 菜单按钮点击事件
         self.toggleButton.clicked.connect(self.toggle_menu)
         self.btn_page_home.clicked.connect(self.switch_page)
-        self.btn_page_friend.clicked.connect(self.switch_page)
+        self.btn_page_pending.clicked.connect(self.switch_page)
         self.btn_page_msg.clicked.connect(self.switch_page)
         self.toggleTheme.clicked.connect(self.set_theme)
 
@@ -278,7 +278,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """切换页面"""
         page_map = {
             'btn_page_home': self.home,
-            'btn_page_friend': self.page_friend,
+            'btn_page_pending': self.page_friend,
             'btn_page_msg': self.wechat
         }
         selected_btn = self.sender()
@@ -353,9 +353,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def set_text_in_widget(self, object_name, text):
         """根据控件的 objectName 设置文本"""
-        widget = self.findChild(QWidget, object_name)
-        if widget and hasattr(widget, 'setText'):
+        if (widget := self.findChild(QWidget, object_name)) and hasattr(widget, 'setText'):
             widget.setText(text)
+        if not text:
+            widget.clear()
 
     def double_click_maximize_restore(self, event):
         """双击标题控件事件"""

@@ -173,52 +173,58 @@ class WxOperation:
         self.wx_window.SendKey(key=auto.SpecialKeyNames['ENTER'], waitTime=wait_time)
         time.sleep(wait_time)  # 等待发送动作完成
 
-    def get_friend_list(self, tag: str = None, num: int = 10) -> list:
+    def get_friend_list(self, tag: str = None) -> list:
         """
         获取微信好友名称.
 
         Args:
             tag(str): 可选参数，如不指定，则获取所有好友
-            num(int): 可选参数，如不指定，只获取10页好友
 
         Returns:
             list
         """
-
-        def click_tag():
-            """点击标签"""
-            contacts_management_window.ButtonControl(Name="标签").Click()
-
         # 点击 通讯录管理
-        self.wx_window.ButtonControl(Name="通讯录").Click()
-        self.wx_window.ListControl(Name="联系人").ButtonControl(Name="通讯录管理").Click()
-        contacts_management_window = auto.GetForegroundControl()  # 切换到通讯录管理，相当于切换到弹出来的页面
-        # contacts_management_window.ButtonControl(Name='最大化').Click()
+        self.wx_window.ButtonControl(Name="通讯录").Click(simulateMove=False)
+        self.wx_window.ListControl(Name="联系人").ButtonControl(Name="通讯录管理").Click(simulateMove=False)
+        # 切换到通讯录管理，相当于切换到弹出来的页面
+        contacts_window = auto.GetForegroundControl()
+        contacts_window.ButtonControl(Name='最大化').Click(simulateMove=False)
 
         if tag:
-            click_tag()  # 点击标签
-            contacts_management_window.PaneControl(Name=tag).Click()
-            time.sleep(0.3)
-            click_tag()  # 关闭标签
-        # 获取滑动模式
-        scroll = contacts_management_window.ListControl().GetScrollPattern()
+            try:
+                contacts_window.ButtonControl(Name="标签").Click(simulateMove=False)
+                contacts_window.PaneControl(Name=tag).Click(simulateMove=False)
+                time.sleep(0.3)
+            except LookupError:
+                contacts_window.SendKey(auto.SpecialKeyNames['ESC'])
+                raise LookupError(f'找不到 {tag} 标签')
+
         name_list = list()
-        if not scroll:
-            for name_node in contacts_management_window.ListControl().GetChildren():  # 获取当前页面的 列表 -> 子节点
-                nick_name = name_node.TextControl().Name  # 用户名
-                remark_name = name_node.ButtonControl(foundIndex=2).Name  # 用户备注名，索引1会错位，索引2是备注名，索引3是标签名
+        last_names = None
+        while True:
+            # TODO 修改成使用 foundIndex 的方式
+            try:
+                nodes = contacts_window.ListControl(foundIndex=2).GetChildren()
+            except LookupError:
+                nodes = contacts_window.ListControl().GetChildren()
+            cur_names = [node.TextControl().Name for node in nodes]
+
+            # 如果滚动前后名单未变，认为到达底部
+            if cur_names == last_names:
+                break
+            last_names = cur_names
+            # 处理当前页的名单
+            for node in nodes:
+                # TODO 如果有需要, 可以处理成导出为两列的csv格式
+                nick_name = node.TextControl().Name  # 用户名
+                remark_name = node.ButtonControl(foundIndex=2).Name  # 用户备注名，索引1会错位，索引2是备注名，索引3是标签名
                 name_list.append(remark_name if remark_name else nick_name)
-        else:
-            rate: int = int(float(102000 / num))  # 根据输入的num计算滑动的步长
-            for pct in range(0, 102000, rate):  # range不支持float，不导入numpy库，采取迂回这的方式
-                # 每次滑动一点点，-1代表不用滑动
-                scroll.SetScrollPercent(horizontalPercent=-1, verticalPercent=pct / 100000)
-                for name_node in contacts_management_window.ListControl().GetChildren():  # 获取当前页面的 列表 -> 子节点
-                    nick_name = name_node.TextControl().Name  # 用户名
-                    remark_name = name_node.ButtonControl(foundIndex=2).Name  # 用户备注名，索引1会错位，索引2是备注名，索引3是标签名
-                    name_list.append(remark_name if remark_name else nick_name)
-        contacts_management_window.SendKey(auto.SpecialKeyNames['ESC'])  # 结束时候关闭 "通讯录管理" 窗口
-        return list(set(name_list))  # 简单去重，但是存在误判（如果存在同名的好友
+            # 向下滚动页面
+            contacts_window.WheelDown(wheelTimes=10, waitTime=0.05)
+        # 结束时候关闭 "通讯录管理" 窗口
+        contacts_window.SendKey(auto.SpecialKeyNames['ESC'])
+        # 简单去重，但是存在误判（如果存在同名的好友), 保持获取时候的顺序
+        return list(dict.fromkeys(name_list))
 
     def get_group_chat_list(self) -> list:
         """获取群聊通讯录中的用户名称"""
@@ -288,3 +294,11 @@ class WxOperation:
             self.__send_text(*msgs, wait_time=text_interval)
         if file_paths:
             self.__send_file(*file_paths, wait_time=file_interval)
+
+
+if __name__ == '__main__':
+    wx = WxOperation()
+    data = wx.get_friend_list('无标签')
+    print(data)
+    print(data.__len__())
+    print(123)

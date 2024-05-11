@@ -40,15 +40,18 @@ class ControllerMain(QObject):
         self.view.btn_clear_file.clicked.connect(self.view.clear_file_list_widget)
         self.view.btn_clear_all.clicked.connect(self.clear_all_actions)
         # 添加文件
-        self.view.btn_add_file.clicked.connect(self.add_send_file)
-        self.view.filesDropped.connect(self.add_send_file)
-        self.view.btn_import_name_list.clicked.connect(self.add_name_list_file)
+        self.view.btn_add_file.clicked.connect(self.import_send_file)
+        self.view.filesDropped.connect(self.import_send_file)
+        self.view.btn_import_name_list.clicked.connect(self.import_name_list_file)
+        self.view.btn_export_name_list.clicked.connect(self.export_tag_name_list)
         # 导出运行结果
         self.view.btn_export_result.clicked.connect(self.export_exec_result)
         # 添加 QListWidget 控件右键菜单
         self.view.add_list_widget_menu()
         #
         self.view.updatedProgressSignal.connect(self.view.update_progress)
+        self.model.exportNameListSignal.connect(self.show_export_msg_box)
+
         #
         self.view.radio_btn_animate_true.clicked.connect(self.set_animate_startup_status)
         self.view.radio_btn_animate_false.clicked.connect(self.set_animate_startup_status)
@@ -75,23 +78,38 @@ class ControllerMain(QObject):
         }
 
     # noinspection PyUnresolvedReferences
-    def add_name_list_file(self) -> None:
+    def import_name_list_file(self) -> None:
         """添加昵称清单"""
         if name_list_file := QFileDialog.getOpenFileName(self.view, '选择文件', '', "Text Files (*.txt)")[0]:
-            self.view.set_text_in_widget('name_list_line_edit', name_list_file)
+            self.view.set_text_in_widget('import_name_list_line_edit', name_list_file)
             self.name_list = read_file(file=name_list_file)
             self.view.show_message_box('导入成功!', QMessageBox.Information)
         else:
             self.name_list = list()
+            self.view.set_text_in_widget('import_name_list_line_edit', '')
             self.view.show_message_box('导入失败!', QMessageBox.Critical, duration=3000)
 
-    def add_send_file(self, new_files):
+    def import_send_file(self, new_files):
         if not new_files:
             new_files = set(QFileDialog.getOpenFileNames(self.view, '选择文件', "All Files (*);;*")[0])
         curr_files = {self.view.file_list_widget.item(row).text() for row in range(self.view.file_list_widget.count())}
         # 计算尚未添加到列表的新文件
         if files_to_add := (new_files - curr_files):
             self.view.file_list_widget.addItems(files_to_add)
+
+    def export_tag_name_list(self):
+        if not self.view.export_tag_name_list_line_edit.text():
+            self.view.show_message_box('无标签名称!', QMessageBox.Critical, duration=1500)
+            return
+        if file_path := QFileDialog.getSaveFileName(self.view, "Create File", "untitled.txt", "Text Files (*.txt)")[0]:
+            if file_path.endswith('.txt'):
+                # 保存文件
+                self.model.get_name_list(self.view.export_tag_name_list_line_edit.text(), file_path)
+        else:
+            self.name_list = list()
+            self.view.set_text_in_widget('export_tag_name_list_line_edit', '')
+            self.view.show_message_box('导入失败!', QMessageBox.Critical, duration=3000)
+            return
 
     def on_send_clicked(self):
         data = self.get_gui_info()
@@ -152,3 +170,7 @@ class ControllerMain(QObject):
         else:
             print(str(not value), not value)
             write_config(APP_NAME, SECTION, OPTION, value=str(False))
+
+    def show_export_msg_box(self, status, tip):
+        icon = QMessageBox.Information if status else QMessageBox.Critical
+        self.view.show_message_box(message=tip, icon=icon)
