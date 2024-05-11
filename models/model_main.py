@@ -4,37 +4,62 @@
 # Date:         2024/4/1 00:00
 # Description:
 
+from typing import Dict
+from collections import defaultdict
 from PySide6.QtCore import (QObject, QRunnable, QThreadPool, Slot, Signal)
 
-from utils import WxOperation
+from utils import (WxOperation, write_file)
 from models import RecordGeneratorModel
 
 
 class TaskRunnable(QRunnable):
-    def __init__(self, func, message_info, **kwargs):
+    def __init__(self, func, task_id, *args, **kwargs):
         super().__init__()
         self.func = func
-        self.message_info = message_info
-        self.check_pause = kwargs.get('check_pause')
+        self.task_id = task_id
+        self.args = args
+        self.kwargs = kwargs
         self.toggleTaskStatusSignal = kwargs.get('toggleTaskStatusSignal')
-        self.updatedProgressSignal = kwargs.get('updatedProgressSignal')
-        self.recordExecInfoSignal = kwargs.get('recordExecInfoSignal')
 
     def run(self):
+        try:
+            self.execute_task()
+        except Exception as e:
+            self.handle_error(e)
+        finally:
+            self.toggleTaskStatusSignal.emit(self.task_id)
+
+    def execute_task(self):
+        # 将由子类实现具体任务
+        pass
+
+    def handle_error(self, error):
+        # 可以在这里处理或记录错误
+        print(f"Error in {self.task_id}: {error}")
+
+
+class SendMessageTask(TaskRunnable):
+    def execute_task(self):
+        # 实现发送消息的逻辑
+        message_info = self.kwargs.get('message_info')
+        check_pause = self.kwargs.get('check_pause')
+        updatedProgressSignal = self.kwargs.get('updatedProgressSignal')
+        recordExecInfoSignal = self.kwargs.get('recordExecInfoSignal')
+
+        names = message_info.pop('names')
         exec_info_map = dict()
-        names = self.message_info.pop('names')
         for idx, name in enumerate(names):
-            self.check_pause()
+            check_pause()
             try:
                 exec_info_map.update(
                     {
                         '昵称': name,
-                        '文本': '\n'.join(self.message_info.get('msgs', str())),
-                        '文件': '\n'.join(self.message_info.get('file_paths', str())),
+                        '文本': '\n'.join(message_info.get('msgs', str())),
+                        '文件': '\n'.join(message_info.get('file_paths', str())),
                         '状态': '成功'
                     }
                 )
-                self.func(name, **self.message_info)
+                self.func(name, **message_info)
             except (ValueError, TypeError, AssertionError, NameError) as e:
                 exec_info_map.update(
                     {
@@ -43,14 +68,27 @@ class TaskRunnable(QRunnable):
                     }
                 )
             finally:
-                self.recordExecInfoSignal.emit(exec_info_map)
-                self.updatedProgressSignal.emit(idx + 1, len(names))  # 通知控制器任务完成
-        self.toggleTaskStatusSignal.emit(True)
+                recordExecInfoSignal.emit(exec_info_map)
+                updatedProgressSignal.emit(idx + 1, len(names))  # 通知控制器任务完成
+
+
+class GetNameListTask(TaskRunnable):
+    def execute_task(self):
+        tag = self.kwargs.get('tag')
+        file_path = self.kwargs.get('file_path')
+        exportNameListSignal = self.kwargs.get('exportNameListSignal')
+        try:
+            result = self.func(tag)
+            write_file(file_path, data=result)
+            exportNameListSignal.emit(True, '文件导出成功')
+        except LookupError:
+            exportNameListSignal.emit(False, f'找不到 {tag} 标签')
 
 
 class ModelMain(QObject):
-    toggleTaskStatusSignal = Signal(bool)
+    toggleTaskStatusSignal = Signal(str)
     recordExecInfoSignal = Signal(dict)
+    exportNameListSignal = Signal(bool, str)
 
     def __init__(self):
         super().__init__()
@@ -60,28 +98,45 @@ class ModelMain(QObject):
         self.record = RecordGeneratorModel()
         self.wx = WxOperation()
         #
-        self.task_status: bool = False
+        self.task_status_map: Dict[str, bool] = defaultdict()  # 用于存放不同任务的状态
         self.toggleTaskStatusSignal.connect(self.change_task_status)
         self.recordExecInfoSignal.connect(self.record_exec_info)
 
     def __del__(self):
         self.record.cleanup()
 
-    def send_wechat_message(self, message_info: dict, check_pause, updatedProgressSignal):
-        # print('self.task_status ==>', self.task_status)
-        if self.task_status:
+    def get_name_list(self, tag, file_path):
+        task_id = 'name_list'
+        if self.task_status_map.get(task_id):
             return
-        self.toggleTaskStatusSignal.emit(True)
+        self.toggleTaskStatusSignal.emit(task_id)
+
+        runnable = GetNameListTask(
+            self.wx.get_friend_list,
+            task_id=task_id,
+            tag=None if tag == '全部' else tag,
+            file_path=file_path,
+            toggleTaskStatusSignal=self.toggleTaskStatusSignal,
+            exportNameListSignal=self.exportNameListSignal
+        )
+        self.thread_pool.start(runnable)
+
+    def send_wechat_message(self, message_info: dict, check_pause, updatedProgressSignal):
+        task_id = 'send_msg'
+        if self.task_status_map.get(task_id):
+            return
+        self.toggleTaskStatusSignal.emit(task_id)
 
         # 处理数据
         message_info = self.process_message_info(message_info=message_info)
-        runnable = TaskRunnable(
+        runnable = SendMessageTask(
             self.wx.send_msg,
-            message_info=message_info,
+            task_id=task_id,
             check_pause=check_pause,
+            message_info=message_info,
             updatedProgressSignal=updatedProgressSignal,
             toggleTaskStatusSignal=self.toggleTaskStatusSignal,
-            recordExecInfoSignal=self.recordExecInfoSignal,
+            recordExecInfoSignal=self.recordExecInfoSignal
         )
         self.thread_pool.start(runnable)
 
@@ -105,6 +160,5 @@ class ModelMain(QObject):
         self.record.record_exec_result(item)
 
     @Slot(bool)
-    def change_task_status(self, task_status_flag):
-        # print('changed task status =>', task_status_flag, not task_status_flag)
-        self.task_status = not self.task_status
+    def change_task_status(self, task_id):
+        self.task_status_map[task_id] = not self.task_status_map.get(task_id)

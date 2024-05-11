@@ -37,6 +37,13 @@ def read_file(file: str):
         ...
 
 
+def write_file(file: str, data: list):
+    try:
+        with open(file, encoding='utf-8', mode='w') as f:
+            f.write("\n".join(data))
+    except (FileNotFoundError, FileExistsError):
+        ...
+
 def copy_files_to_clipboard(file_paths: list):
     # 定义所需的 Windows 结构和函数
     CF_HDROP = 15

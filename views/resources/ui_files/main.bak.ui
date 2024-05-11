@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>1280</width>
-    <height>719</height>
+    <height>720</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -821,7 +821,7 @@ Button */
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="btn_page_friend">
+                 <widget class="QPushButton" name="btn_page_pending">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -840,11 +840,10 @@ Button */
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-image: url(:/icons/icons/friend.png);
-</string>
+                   <string notr="true">background-image: url(:/icons/icons/friend.png);</string>
                   </property>
                   <property name="text">
-                   <string>获取好友</string>
+                   <string>待定</string>
                   </property>
                  </widget>
                 </item>
@@ -1199,7 +1198,7 @@ Button */
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>45</height>
+                    <height>40</height>
                    </size>
                   </property>
                   <property name="frameShape">
@@ -1313,7 +1312,7 @@ Button */
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>45</height>
+                    <height>40</height>
                    </size>
                   </property>
                   <property name="frameShape">
@@ -1422,7 +1421,7 @@ Button */
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>45</height>
+                    <height>40</height>
                    </size>
                   </property>
                   <property name="frameShape">
@@ -1462,6 +1461,9 @@ Button */
                    </item>
                    <item>
                     <widget class="QRadioButton" name="radio_btn_animate_true">
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
                      <property name="text">
                       <string>是</string>
                      </property>
@@ -1472,6 +1474,9 @@ Button */
                    </item>
                    <item>
                     <widget class="QRadioButton" name="radio_btn_animate_false">
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
                      <property name="text">
                       <string>否</string>
                      </property>
@@ -1485,7 +1490,7 @@ Button */
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>45</height>
+                    <height>40</height>
                    </size>
                   </property>
                   <property name="frameShape">
@@ -1524,7 +1529,7 @@ Button */
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="name_list_line_edit">
+                    <widget class="QLineEdit" name="import_name_list_line_edit">
                      <property name="minimumSize">
                       <size>
                        <width>175</width>
@@ -1536,6 +1541,9 @@ Button */
                        <width>260</width>
                        <height>16777215</height>
                       </size>
+                     </property>
+                     <property name="readOnly">
+                      <bool>true</bool>
                      </property>
                     </widget>
                    </item>
@@ -1557,11 +1565,105 @@ Button */
                       <cursorShape>PointingHandCursor</cursorShape>
                      </property>
                      <property name="text">
-                      <string>Open</string>
+                      <string>导入</string>
                      </property>
                      <property name="icon">
                       <iconset resource="../resources.qrc">
-                       <normaloff>:/icons/icons/cil-file.png</normaloff>:/icons/icons/cil-file.png</iconset>
+                       <normaloff>:/icons/icons/import.png</normaloff>:/icons/icons/import.png</iconset>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>20</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignLeft">
+                 <widget class="QFrame" name="frame_16">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_12">
+                   <property name="spacing">
+                    <number>10</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label_6">
+                     <property name="text">
+                      <string>导出好友名单</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="export_tag_name_list_line_edit">
+                     <property name="minimumSize">
+                      <size>
+                       <width>175</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>若获取全部好友名单，则输入全部</string>
+                     </property>
+                     <property name="placeholderText">
+                      <string>在此处输入标签</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="btn_export_name_list">
+                     <property name="minimumSize">
+                      <size>
+                       <width>60</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>80</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
+                     <property name="text">
+                      <string>导出</string>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../resources.qrc">
+                       <normaloff>:/icons/icons/export.png</normaloff>:/icons/icons/export.png</iconset>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>20</width>
+                       <height>20</height>
+                      </size>
                      </property>
                     </widget>
                    </item>
@@ -1611,8 +1713,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt; color:#ffffff;&quot;&gt;关注公众号：&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#bd93f9;&quot;&gt;小菜的Python杂货铺&lt;/span&gt;&lt;span style=&quot; font-size:9pt; color:#ffffff;&quot;&gt;&lt;br /&gt;回复：&lt;/span&gt;&lt;span style=&quot; font-size:9pt; font-weight:700; color:#ff79c6;&quot;&gt;微信群发&lt;/span&gt;&lt;span style=&quot; font-size:9pt; color:#ffffff;&quot;&gt;，即可获取&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; color:#ff79c6;&quot;&gt;如何使用&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt; color:#ffffff;&quot;&gt;双击此处，即可打开视频教程&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; color:#ff79c6;&quot;&gt;授权信息&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;MIT 许可证&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; color:#ff79c6;&quot;&gt;技术栈&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;使用 PySide6 进行 UI 开发，Python 脚本进行后端逻辑处理。&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; color:#ff79c6;&quot;&gt;开发者&lt;/span&gt;&lt;/p&gt;
@@ -2052,8 +2152,11 @@ background-image: url(:/images/images/WeChatMass_vertical.png);</string>
                          <layout class="QHBoxLayout" name="horizontalLayout_9">
                           <item alignment="Qt::AlignHCenter">
                            <widget class="QLabel" name="label">
+                            <property name="styleSheet">
+                             <string notr="true">font: 700 28pt &quot;Microsoft YaHei UI&quot;;</string>
+                            </property>
                             <property name="text">
-                             <string>获取好友，待补充</string>
+                             <string>还不知道这个界面需要实现什么功能！</string>
                             </property>
                            </widget>
                           </item>

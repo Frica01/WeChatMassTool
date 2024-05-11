@@ -10,6 +10,8 @@
     <file>svgs/login.svg</file>
   </qresource>
   <qresource prefix="icons">
+    <file>icons/import.png</file>
+    <file>icons/export.png</file>
     <file>icons/friend.png</file>
     <file>icons/status-fail.png</file>
     <file>icons/status-success.png</file>
