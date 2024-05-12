@@ -44,6 +44,7 @@ def write_file(file: str, data: list):
     except (FileNotFoundError, FileExistsError):
         ...
 
+
 def copy_files_to_clipboard(file_paths: list):
     # 定义所需的 Windows 结构和函数
     CF_HDROP = 15
@@ -88,8 +89,7 @@ def minimize_wechat(class_name, name):
     """
     hwnd = win32gui.FindWindow(class_name, name)
     if win32gui.IsWindowVisible(hwnd):
-        # 展示窗口，以下几行代码都可以唤醒窗口
-        win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
+        win32gui.SendMessage(hwnd, win32con.WM_CLOSE, 0, 0)
 
 
 def wake_up_window(class_name, name):

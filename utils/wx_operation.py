@@ -11,8 +11,8 @@ from typing import Iterable
 
 import uiautomation as auto
 
-from config import AutomationConfig as Config
-from utils import (copy_files_to_clipboard, minimize_wechat, wake_up_window)
+from config import (WECHAT_WINDOW_CLASSNAME, WECHAT_WINDOW_NAME)
+from utils import (copy_files_to_clipboard, wake_up_window)
 
 
 def set_default_timeout(seconds: float = 0.0):
@@ -51,15 +51,11 @@ class WxOperation:
     def __init__(self):
         set_default_timeout(0.1)
         # Windows系统层面唤醒微信窗口
-        wake_up_window(class_name=Config.WECHAT_WINDOW_CLASSNAME, name=Config.WECHAT_WINDOW_NAME)
-        self.wx_window = auto.WindowControl(Name=Config.WECHAT_WINDOW_NAME, ClassName=Config.WECHAT_WINDOW_CLASSNAME)
-        # assert self.wx_window.Exists(1.5, .5), "窗口不存在"
+        wake_up_window(class_name=WECHAT_WINDOW_CLASSNAME, name=WECHAT_WINDOW_NAME)
+        self.wx_window = auto.WindowControl(Name=WECHAT_WINDOW_NAME, ClassName=WECHAT_WINDOW_CLASSNAME)
         if not self.wx_window.Exists(1, .5):
             raise Exception('微信似乎并没有登录!')
         self.input_edit = self.wx_window.EditControl()
-
-    def __del__(self):
-        minimize_wechat(class_name=Config.WECHAT_WINDOW_CLASSNAME, name=Config.WECHAT_WINDOW_NAME)
 
     def __match_nickname(self, name) -> bool:
         """获取当前面板的好友昵称"""

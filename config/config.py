@@ -9,10 +9,8 @@ APP_NAME = 'WeChatMassTool'
 SECTION = 'DEFAULT'
 OPTION = 'animate_on_startup'
 
-
-class AutomationConfig:
-    WECHAT_WINDOW_NAME = '微信'
-    WECHAT_WINDOW_CLASSNAME = 'WeChatMainWndForPC'
+WECHAT_WINDOW_NAME = '微信'
+WECHAT_WINDOW_CLASSNAME = 'WeChatMainWndForPC'
 
 
 class BasicConfig:
