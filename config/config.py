@@ -46,7 +46,7 @@ class DarkConfig:
                         border: 2px solid #5D535E;border-radius: 6px;
                     }''',
         'file_list_widget': '''QListWidget {
-                                    background-color: rgb(33, 37, 43);
+                                    background-color: rgb(27, 29, 35);
                                     border-radius: 5px;
                                     padding: 3px;
                                     border: 1px solid rgb(45, 45, 58);
