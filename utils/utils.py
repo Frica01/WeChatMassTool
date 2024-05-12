@@ -104,9 +104,13 @@ def wake_up_window(class_name, name):
 
     """
     if hwnd := win32gui.FindWindow(class_name, name):
-        # 展示窗口
-        win32gui.SetForegroundWindow(hwnd)
-        win32gui.ShowWindow(hwnd, win32con.SW_SHOWDEFAULT)
+        # 回复窗口
+        win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+        # 尝试将窗口置前
+        try:
+            win32gui.SetForegroundWindow(hwnd)
+        except Exception as e:
+            print(f"尝试将窗口置前时出错: {e}")
 
 
 def get_resource_path(relative_path):
