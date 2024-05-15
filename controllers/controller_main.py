@@ -8,9 +8,9 @@
 from PySide6.QtCore import (QObject, QMutexLocker, QMutex, QWaitCondition)
 from PySide6.QtWidgets import (QFileDialog, QMessageBox)
 
+from config import (Animate, WeChat)
 from models import ModelMain
 from utils import (read_file, write_config)
-from config import (Animate, WeChat)
 from views import ViewMain
 
 
@@ -40,23 +40,23 @@ class ControllerMain(QObject):
         self.view.btn_clear_file.clicked.connect(self.view.clear_file_list_widget)
         self.view.btn_clear_all.clicked.connect(self.clear_all_actions)
         # 添加文件
-        self.view.btn_add_file.clicked.connect(self.import_send_file)
-        self.view.filesDropped.connect(self.import_send_file)
-        self.view.btn_import_name_list.clicked.connect(self.import_name_list_file)
+        self.view.btn_add_file.clicked.connect(self.import_send_file_list)
+        self.view.filesDropped.connect(self.import_send_file_list)
+        self.view.btn_import_name_list.clicked.connect(self.import_name_list)
         self.view.btn_export_name_list.clicked.connect(self.export_tag_name_list)
         # 导出运行结果
         self.view.btn_export_result.clicked.connect(self.export_exec_result)
-        # 添加 QListWidget 控件右键菜单
+        # 添加 文件 QListWidget 控件右键菜单
         self.view.add_list_widget_menu()
-        #
+        # 进度条和导出按钮
         self.view.updatedProgressSignal.connect(self.view.update_progress)
         self.model.exportNameListSignal.connect(self.show_export_msg_box)
-
-        #
+        # 开启和关闭动画启动按钮
         self.view.radio_btn_animate_true.clicked.connect(self.set_animate_startup_status)
         self.view.radio_btn_animate_false.clicked.connect(self.set_animate_startup_status)
 
     def get_gui_info(self):
+        """获取当前面板填写的信息"""
         single_text = self.view.single_line_msg_text_edit.toPlainText()
         multi_text = self.view.multi_line_msg_text_edit.toPlainText()
         files = [self.view.file_list_widget.item(row).text() for row in range(self.view.file_list_widget.count())]
@@ -78,7 +78,7 @@ class ControllerMain(QObject):
         }
 
     # noinspection PyUnresolvedReferences
-    def import_name_list_file(self) -> None:
+    def import_name_list(self) -> None:
         """添加昵称清单"""
         if name_list_file := QFileDialog.getOpenFileName(self.view, '选择文件', '', "Text Files (*.txt)")[0]:
             self.view.set_text_in_widget('import_name_list_line_edit', name_list_file)
@@ -89,7 +89,8 @@ class ControllerMain(QObject):
             self.view.set_text_in_widget('import_name_list_line_edit', '')
             self.view.show_message_box('导入失败!', QMessageBox.Critical, duration=3000)
 
-    def import_send_file(self, new_files):
+    def import_send_file_list(self, new_files):
+        """导入发送名单"""
         if not new_files:
             new_files = set(QFileDialog.getOpenFileNames(self.view, '选择文件', "All Files (*);;*")[0])
         curr_files = {self.view.file_list_widget.item(row).text() for row in range(self.view.file_list_widget.count())}
@@ -98,13 +99,14 @@ class ControllerMain(QObject):
             self.view.file_list_widget.addItems(files_to_add)
 
     def export_tag_name_list(self):
+        """导出标签好友名单"""
         if not self.view.export_tag_name_list_line_edit.text():
             self.view.show_message_box('无标签名称!', QMessageBox.Critical, duration=1500)
             return
         if file_path := QFileDialog.getSaveFileName(self.view, "Create File", "untitled.txt", "Text Files (*.txt)")[0]:
             if file_path.endswith('.txt'):
                 # 保存文件
-                self.model.get_name_list(self.view.export_tag_name_list_line_edit.text(), file_path)
+                self.model.export_name_list(self.view.export_tag_name_list_line_edit.text(), file_path)
         else:
             self.name_list = list()
             self.view.set_text_in_widget('export_tag_name_list_line_edit', '')
@@ -112,6 +114,7 @@ class ControllerMain(QObject):
             return
 
     def on_send_clicked(self):
+        """点击发送按钮触发的事件"""
         data = self.get_gui_info()
         print(data)
         self.model.send_wechat_message(
@@ -156,17 +159,20 @@ class ControllerMain(QObject):
         self.name_list = list()
 
     def init_animate_radio_btn(self, flag):
+        """初始化动画配置单选按钮"""
         if flag:
             self.view.radio_btn_animate_true.click()
         else:
             self.view.radio_btn_animate_false.click()
 
     def set_animate_startup_status(self):
+        """设置动画配置单选按钮状态"""
         if self.view.radio_btn_animate_true.isChecked():
             write_config(WeChat.APP_NAME, Animate.SECTION, Animate.OPTION, value=str(True))
         else:
             write_config(WeChat.APP_NAME, Animate.SECTION, Animate.OPTION, value=str(False))
 
     def show_export_msg_box(self, status, tip):
+        """展示导出消息的弹窗"""
         icon = QMessageBox.Information if status else QMessageBox.Critical
         self.view.show_message_box(message=tip, icon=icon)

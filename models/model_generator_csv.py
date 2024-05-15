@@ -16,11 +16,12 @@ class RecordGeneratorModel:
         os.makedirs(self.cache_dir, exist_ok=True)
 
     def record_exec_result(self, result):
-        # result应为字典格式，如{'发送文本': 'xxx', '发送文件': 'xxx', '状态': 'xxx'}
+        """记录执行结果"""
         with open(self.temp_file_path, 'ab') as file:
             pickle.dump(result, file)
 
     def load_exec_results(self):
+        """加载执行结果"""
         results = []
         if os.path.exists(self.temp_file_path):
             with open(self.temp_file_path, 'rb') as file:
@@ -32,12 +33,14 @@ class RecordGeneratorModel:
         return results
 
     def cleanup(self):
+        """清理缓存文件"""
         if os.path.exists(self.temp_file_path):
             os.remove(self.temp_file_path)
         if os.path.exists(self.cache_dir):
             os.rmdir(self.cache_dir)
 
     def export_exec_result_to_csv(self, csv_filepath):
+        """导出执行结果"""
         try:
             results = self.load_exec_results()
             with open(csv_filepath, 'w', newline='') as csvfile:

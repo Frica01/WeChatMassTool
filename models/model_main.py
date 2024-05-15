@@ -105,7 +105,8 @@ class ModelMain(QObject):
     def __del__(self):
         self.record.cleanup()
 
-    def get_name_list(self, tag, file_path):
+    def export_name_list(self, tag, file_path):
+        """导出标签好友名单"""
         task_id = 'name_list'
         if self.task_status_map.get(task_id):
             return
@@ -122,6 +123,7 @@ class ModelMain(QObject):
         self.thread_pool.start(runnable)
 
     def send_wechat_message(self, message_info: dict, check_pause, updatedProgressSignal):
+        """发送微信消息"""
         task_id = 'send_msg'
         if self.task_status_map.get(task_id):
             return
