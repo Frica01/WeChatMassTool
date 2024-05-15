@@ -4,13 +4,17 @@
 # Date:         2024/3/22 15:19
 # Description:
 
-PROCESS_NAME = 'WeChat.exe'
-APP_NAME = 'WeChatMassTool'
-SECTION = 'DEFAULT'
-OPTION = 'animate_on_startup'
 
-WECHAT_WINDOW_NAME = '微信'
-WECHAT_WINDOW_CLASSNAME = 'WeChatMainWndForPC'
+class AnimateConfig:
+    SECTION = 'DEFAULT'
+    OPTION = 'animate_on_startup'
+
+
+class WeChatConfig:
+    PROCESS_NAME = 'WeChat.exe'
+    APP_NAME = 'WeChatMassTool'
+    WINDOW_NAME = '微信'
+    WINDOW_CLASSNAME = 'WeChatMainWndForPC'
 
 
 class BasicConfig:

@@ -11,7 +11,7 @@ from typing import Iterable
 
 import uiautomation as auto
 
-from config import (WECHAT_WINDOW_CLASSNAME, WECHAT_WINDOW_NAME)
+from config import WeChat
 from utils import (copy_files_to_clipboard, wake_up_window)
 
 
@@ -51,8 +51,8 @@ class WxOperation:
     def __init__(self):
         set_default_timeout(0.1)
         # Windows系统层面唤醒微信窗口
-        wake_up_window(class_name=WECHAT_WINDOW_CLASSNAME, name=WECHAT_WINDOW_NAME)
-        self.wx_window = auto.WindowControl(Name=WECHAT_WINDOW_NAME, ClassName=WECHAT_WINDOW_CLASSNAME)
+        wake_up_window(class_name=WeChat.WINDOW_CLASSNAME, name=WeChat.WINDOW_NAME)
+        self.wx_window = auto.WindowControl(Name=WeChat.WINDOW_NAME, ClassName=WeChat.WINDOW_CLASSNAME)
         if not self.wx_window.Exists(1, .5):
             raise Exception('微信似乎并没有登录!')
         self.input_edit = self.wx_window.EditControl()

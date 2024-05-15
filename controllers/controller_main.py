@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QFileDialog, QMessageBox)
 
 from models import ModelMain
 from utils import (read_file, write_config)
-from config import (APP_NAME, SECTION, OPTION)
+from config import (Animate, WeChat)
 from views import ViewMain
 
 
@@ -162,14 +162,10 @@ class ControllerMain(QObject):
             self.view.radio_btn_animate_false.click()
 
     def set_animate_startup_status(self):
-        # print('true ==>', self.view.radio_btn_animate_true.isChecked())
-        # print('false ==>', self.view.radio_btn_animate_false.isChecked())
-        if value := self.view.radio_btn_animate_true.isChecked():
-            print(str(value), value)
-            write_config(APP_NAME, SECTION, OPTION, value=str(True))
+        if self.view.radio_btn_animate_true.isChecked():
+            write_config(WeChat.APP_NAME, Animate.SECTION, Animate.OPTION, value=str(True))
         else:
-            print(str(not value), not value)
-            write_config(APP_NAME, SECTION, OPTION, value=str(False))
+            write_config(WeChat.APP_NAME, Animate.SECTION, Animate.OPTION, value=str(False))
 
     def show_export_msg_box(self, status, tip):
         icon = QMessageBox.Information if status else QMessageBox.Critical

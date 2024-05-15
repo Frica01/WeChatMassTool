@@ -5,6 +5,5 @@
 # Description:
 
 from config.config import (
-    BasicConfig, DarkConfig, LightConfig, PROCESS_NAME, APP_NAME, SECTION, OPTION, WECHAT_WINDOW_CLASSNAME,
-    WECHAT_WINDOW_NAME
+    BasicConfig, DarkConfig, LightConfig, AnimateConfig as Animate, WeChatConfig as WeChat
 )
