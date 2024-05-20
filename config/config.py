@@ -17,7 +17,7 @@ class WeChatConfig:
     WINDOW_CLASSNAME = 'WeChatMainWndForPC'
 
 
-class BasicConfig:
+class ViewConfig:
     # APP SETTINGS
     MENU_WIDTH = 180
     LEFT_BOX_WIDTH = 360
@@ -94,3 +94,11 @@ class LightConfig:
                                     color: #f8f8f2;
                                 }'''
     }
+
+
+class IntervalConfig:
+    BASE_INTERVAL = 0.1  # 基础间隔（秒）
+    SEND_TEXT_INTERVAL = 0.05  # 发送文本间隔（秒）
+    SEND_FILE_INTERVAL = 0.25  # 发送文件间隔（秒）
+    MAX_SEARCH_SECOND = 0.1
+    MAX_SEARCH_INTERVAL = 0.05

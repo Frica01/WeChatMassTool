@@ -11,7 +11,7 @@ from PySide6.QtCore import (Qt, QTimer, QEvent, QPoint, QPropertyAnimation, QPar
 from PySide6.QtGui import (QIcon, QAction)
 from PySide6.QtWidgets import (QMainWindow, QApplication, QSizeGrip, QPushButton, QMessageBox, QWidget)
 
-from config import (BasicConfig, DarkConfig, LightConfig)
+from config import (ViewConfig, DarkConfig, LightConfig)
 from views.ui_components import (create_width_animation, create_animation_group, apply_shadow_effect)
 from views.ui_designs import Ui_MainWindow
 from views.widgets import CustomGrip
@@ -179,7 +179,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def toggle_menu(self):
         """切换菜单"""
         # GET TARGET WIDTH
-        target_width = BasicConfig.MENU_WIDTH if self.leftMenuBg.width() == 60 else 60
+        target_width = ViewConfig.MENU_WIDTH if self.leftMenuBg.width() == 60 else 60
 
         # ANIMATION
         self.animation = create_width_animation(self.leftMenuBg, target_width)
@@ -233,8 +233,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # 计算左右侧面板应该展开或收起的目标宽度
         left_width = self.extraLeftBox.width()
         right_width = self.extraRightBox.width()
-        target_left_width = BasicConfig.LEFT_BOX_WIDTH if (left_width == 0 and direction == "left") else 0
-        target_right_width = BasicConfig.RIGHT_BOX_WIDTH if (right_width == 0 and direction == "right") else 0
+        target_left_width = ViewConfig.LEFT_BOX_WIDTH if (left_width == 0 and direction == "left") else 0
+        target_right_width = ViewConfig.RIGHT_BOX_WIDTH if (right_width == 0 and direction == "right") else 0
 
         # 先判断是否为添加默认样式
         if add_default_style:

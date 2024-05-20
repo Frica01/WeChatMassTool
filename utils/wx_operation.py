@@ -11,15 +11,8 @@ from typing import Iterable
 
 import uiautomation as auto
 
-from config import WeChat
+from config import (WeChat, Interval)
 from utils import (copy_files_to_clipboard, wake_up_window)
-
-
-def set_default_timeout(seconds: float = 0.0):
-    if seconds:
-        auto.SetGlobalSearchTimeout(seconds)
-    else:
-        auto.SetGlobalSearchTimeout(3)
 
 
 class WxOperation:
@@ -49,18 +42,18 @@ class WxOperation:
     """
 
     def __init__(self):
-        set_default_timeout(0.1)
+        auto.SetGlobalSearchTimeout(Interval.BASE_INTERVAL)
         # Windows系统层面唤醒微信窗口
         wake_up_window(class_name=WeChat.WINDOW_CLASSNAME, name=WeChat.WINDOW_NAME)
         self.wx_window = auto.WindowControl(Name=WeChat.WINDOW_NAME, ClassName=WeChat.WINDOW_CLASSNAME)
-        if not self.wx_window.Exists(1, .5):
+        if not self.wx_window.Exists(Interval.MAX_SEARCH_SECOND, searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
             raise Exception('微信似乎并没有登录!')
         self.input_edit = self.wx_window.EditControl()
 
     def __match_nickname(self, name) -> bool:
         """获取当前面板的好友昵称"""
         self.input_edit = self.wx_window.EditControl(Name=name)
-        if self.input_edit.Exists(0.1, 0.05):
+        if self.input_edit.Exists(Interval.MAX_SEARCH_SECOND, searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
             return True
         return False
 
@@ -75,22 +68,22 @@ class WxOperation:
             None
         """
         assert name, "无法跳转到名字为空的聊天窗口"
-        self.wx_window.SendKeys(text='{Ctrl}f', waitTime=0.2)
-        self.wx_window.SendKeys(text='{Ctrl}a', waitTime=0.1)
+        self.wx_window.SendKeys(text='{Ctrl}F', waitTime=Interval.BASE_INTERVAL)
+        self.wx_window.SendKeys(text='{Ctrl}A', waitTime=Interval.BASE_INTERVAL)
         self.wx_window.SendKey(key=auto.SpecialKeyNames['DELETE'])
         auto.SetClipboardText(text=name)
-        time.sleep(.2)
-        self.wx_window.SendKeys(text='{Ctrl}v', waitTime=0.1)
+        time.sleep(Interval.BASE_INTERVAL)
+        self.wx_window.SendKeys(text='{Ctrl}V', waitTime=Interval.BASE_INTERVAL)
         for idx, item in enumerate(self.wx_window.ListControl(foundIndex=2).GetChildren()):
             _name = item.Name
             if idx == 0:  # 跳过第一个 标签
                 continue
             if _name == "":
-                self.wx_window.SendKeys(text='{Esc}', waitTime=0.1)  # 没有匹配的用户, 取消搜索
+                self.wx_window.SendKeys(text='{Esc}', waitTime=Interval.BASE_INTERVAL)  # 没有匹配的用户, 取消搜索
                 return False
             if _name == name:
-                self.wx_window.SendKey(key=auto.SpecialKeyNames['ENTER'], waitTime=0.2)
-                time.sleep(.2)
+                self.wx_window.SendKey(key=auto.SpecialKeyNames['ENTER'], waitTime=Interval.BASE_INTERVAL)
+                time.sleep(Interval.BASE_INTERVAL)
                 return True
         return False
 
@@ -105,26 +98,26 @@ class WxOperation:
         # 群聊 定位 聊天框 需要带上群人数，故会匹配失败，所以匹配失败的就是群聊
         result = self.wx_window.TextControl(Name=group_chat_name, foundIndex=2)
         # 只要匹配不上，说明这是个群聊窗口
-        if not result.Exists(maxSearchSeconds=0.2, searchIntervalSeconds=0.1):
+        if not result.Exists(Interval.MAX_SEARCH_SECOND, searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
             # 寻找是否有 @所有人 的选项
-            self.input_edit.SendKeys(text='{Shift}2', waitTime=0.1)
+            self.input_edit.SendKeys(text='{Shift}2', waitTime=Interval.BASE_INTERVAL)
             everyone = self.wx_window.ListItemControl(Name='所有人')
-            if not everyone.Exists(maxSearchSeconds=0.2, searchIntervalSeconds=0.1):
-                self.input_edit.SendKeys(text='{Ctrl}A', waitTime=0.1)
-                self.input_edit.SendKeys(text='{Delete}', waitTime=0.1)
+            if not everyone.Exists(Interval.MAX_SEARCH_SECOND, searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
+                self.input_edit.SendKeys(text='{Ctrl}A', waitTime=Interval.BASE_INTERVAL)
+                self.input_edit.SendKeys(text='{Delete}', waitTime=Interval.BASE_INTERVAL)
                 return
-            self.input_edit.SendKeys(text='{Up}', waitTime=0.1)
-            self.input_edit.SendKeys(text='{Enter}', waitTime=0.1)
-            self.input_edit.SendKeys(text='{Enter}', waitTime=0.1)
+            self.input_edit.SendKeys(text='{Up}', waitTime=Interval.BASE_INTERVAL)
+            self.input_edit.SendKeys(text='{Enter}', waitTime=Interval.BASE_INTERVAL)
+            self.input_edit.SendKeys(text='{Enter}', waitTime=Interval.BASE_INTERVAL)
 
-    def __send_text(self, *msgs, wait_time=0.05) -> None:
+    def __send_text(self, *msgs, wait_time) -> None:
         """
         发送文本.
 
         Args:
             input_name(str): 必选参数, 为输入框
             *msgs(str): 必选参数，为发送的文本
-            wait_time(float): 可选参数，为动态等待时间，默认为0.02秒
+            wait_time(float): 必选参数，为动态等待时间
 
         Returns:
             None
@@ -151,12 +144,13 @@ class WxOperation:
             # 设置到剪切板再黏贴到输入框
             self.wx_window.SendKey(key=auto.SpecialKeyNames['ENTER'], waitTime=wait_time * 2)
 
-    def __send_file(self, *file_paths, wait_time=0.5) -> None:
+    def __send_file(self, *file_paths, wait_time) -> None:
         """
         发送文件.
 
         Args:
             *file_paths(str): 必选参数，为文件的路径
+            wait_time(float): 必选参数，为动态等待时间
 
         Returns:
             None
@@ -190,7 +184,7 @@ class WxOperation:
             try:
                 contacts_window.ButtonControl(Name="标签").Click(simulateMove=False)
                 contacts_window.PaneControl(Name=tag).Click(simulateMove=False)
-                time.sleep(0.3)
+                time.sleep(Interval.BASE_INTERVAL * 2)
             except LookupError:
                 contacts_window.SendKey(auto.SpecialKeyNames['ESC'])
                 raise LookupError(f'找不到 {tag} 标签')
@@ -216,7 +210,7 @@ class WxOperation:
                 remark_name = node.ButtonControl(foundIndex=2).Name  # 用户备注名，索引1会错位，索引2是备注名，索引3是标签名
                 name_list.append(remark_name if remark_name else nick_name)
             # 向下滚动页面
-            contacts_window.WheelDown(wheelTimes=10, waitTime=0.05)
+            contacts_window.WheelDown(wheelTimes=10, waitTime=Interval.BASE_INTERVAL / 2)
         # 结束时候关闭 "通讯录管理" 窗口
         contacts_window.SendKey(auto.SpecialKeyNames['ESC'])
         # 简单去重，但是存在误判（如果存在同名的好友), 保持获取时候的顺序
@@ -235,8 +229,8 @@ class WxOperation:
             name_list.append(item.ButtonControl().Name)
         return name_list
 
-    def send_msg(self, name, msgs=None, file_paths=None,
-                 add_remark_name=False, at_everyone=False, text_interval=0.05, file_interval=0.5) -> None:
+    def send_msg(self, name, msgs=None, file_paths=None, add_remark_name=False, at_everyone=False,
+                 text_interval=Interval.SEND_TEXT_INTERVAL, file_interval=Interval.SEND_FILE_INTERVAL) -> None:
         """
         发送消息，可同时发送文本和文件（至少选一项
 
@@ -276,9 +270,9 @@ class WxOperation:
 
         # @所有人
         if at_everyone:
-            set_default_timeout(0.2)
+            auto.SetGlobalSearchTimeout(Interval.BASE_INTERVAL)
             self.at_at_everyone(group_chat_name=name)
-            set_default_timeout()
+            auto.SetGlobalSearchTimeout(Interval.BASE_INTERVAL * 25)
 
         # TODO
         #  添加备注可以多做一个选项，添加到每条消息的前面，如xxx，早上好
