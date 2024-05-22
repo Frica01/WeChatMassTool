@@ -36,7 +36,7 @@ def wake_up_window(class_name, name):
 
     """
     if hwnd := win32gui.FindWindow(class_name, name):
-        # 回复窗口
+        # 恢复窗口
         win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
         # 尝试将窗口置前
         try:
