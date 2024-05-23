@@ -3,11 +3,11 @@
 # Author:       小菜
 # Date:         2024/4/01 00:00
 # Description:
-
-
 import datetime
+import os
 import platform
 import sys
+import tempfile
 from ctypes import windll
 
 import PySide6
@@ -15,11 +15,10 @@ import uiautomation
 from PySide6 import QtGui
 from PySide6.QtWidgets import (QApplication, QMessageBox, QWidget)
 from cprint import cprint
-from tendo import singleton
 
 from config import (Animate, WeChat)
 from controllers import ControllerMain
-from utils import (get_specific_process, get_resource_path, get_config, minimize_wechat)
+from utils import (get_specific_process, is_process_running, get_resource_path, get_config, minimize_wechat)
 from version import (__version__, __project_name__, __author__)
 
 
@@ -33,12 +32,11 @@ def set_app_user_model_id():
 
 
 def print_startup_info():
-
     # 获取系统信息
     system_info = platform.uname()
 
-    Bot_Logo = r""" 
-    
+    bot_logo = r""" 
+
     /¯¯¯¯\         /¯¯¯¯\         /¯¯¯¯\     
   o-|[][]|-o     o-|[][]|-o     o-|[][]|-o   
     |_--_|         |_--_|         |_--_|     
@@ -65,13 +63,13 @@ def print_startup_info():
 
         项目启动中...
     """
-    cprint.info(Bot_Logo.rstrip('\n'))
+    cprint.info(bot_logo.rstrip('\n'))
     cprint.info(startup_info.rstrip('\n'))
 
 
 def check_wechat_running():
     """检查微信是否运行"""
-    if not get_specific_process(proc_name=WeChat.PROCESS_NAME):
+    if not get_specific_process(proc_name=WeChat.WeChat_PROCESS_NAME):
         QMessageBox.critical(QWidget(), '报错咯', "微信未启动!")
         sys.exit()  # 退出程序
 
@@ -89,11 +87,29 @@ def initialize_application():
 
 def main():
     """主入口"""
-    try:
-        singleton.SingleInstance()  # 将检查是否已有实例运行
-    except singleton.SingleInstanceException:
-        sys.exit()  # 如果已有实例运行，退出程序
-    # 正常启动流程
+    # 使用文件锁来保证单实例运行, 获取系统存储临时文件路径
+    lock_file = os.path.join(tempfile.gettempdir(), WeChat.APP_LOCK_NAME)
+
+    # 检查并删除过时的锁文件
+    if os.path.exists(lock_file):
+        try:
+            with open(lock_file) as f:
+                pid = int(f.read().strip())
+            # 检查是否有进程在运行
+            if not is_process_running(pid=pid, proc_name=WeChat.APP_PROCESS_NAME):
+                os.remove(lock_file)
+        except (FileExistsError, FileNotFoundError):
+            os.remove(lock_file)
+
+    if os.path.exists(lock_file):
+        print("另一个实例已经在运行。")
+        sys.exit()
+
+    # 创建锁文件
+    with open(lock_file, 'w') as f:
+        f.write(str(os.getpid()))
+
+    # 正常走的流程
     set_app_user_model_id()
     print_startup_info()  # 打印启动信息
     initialize_application()
