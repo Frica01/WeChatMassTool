@@ -5,7 +5,7 @@
 # Description:
 
 
-from PySide6.QtCore import (QObject, QMutexLocker, QMutex, QWaitCondition)
+from PySide6.QtCore import (QObject, QMutexLocker, QMutex, QWaitCondition, Slot)
 from PySide6.QtWidgets import (QFileDialog, QMessageBox)
 
 from config import (Animate, WeChat)
@@ -48,9 +48,10 @@ class ControllerMain(QObject):
         self.view.btn_export_result.clicked.connect(self.export_exec_result)
         # 添加 文件 QListWidget 控件右键菜单
         self.view.add_list_widget_menu()
-        # 进度条和导出按钮
+        # 进度条, 导出按钮 和 显示信息栏的 Signal
         self.view.updatedProgressSignal.connect(self.view.update_progress)
         self.model.exportNameListSignal.connect(self.show_export_msg_box)
+        self.model.showInfoBarSignal.connect(self.show_infobar)
         # 开启和关闭动画启动按钮
         self.view.radio_btn_animate_true.clicked.connect(self.set_animate_startup_status)
         self.view.radio_btn_animate_false.clicked.connect(self.set_animate_startup_status)
@@ -172,7 +173,14 @@ class ControllerMain(QObject):
         else:
             write_config(WeChat.APP_NAME, Animate.SECTION, Animate.OPTION, value=str(False))
 
+    @Slot(bool, str)
     def show_export_msg_box(self, status, tip):
         """展示导出消息的弹窗"""
         icon = QMessageBox.Information if status else QMessageBox.Critical
         self.view.show_message_box(message=tip, icon=icon)
+
+    @Slot(bool, str)
+    def show_infobar(self, status, tip):
+        icon_type = 'success' if status else 'fail'
+        print(status, tip)
+        self.view.add_infobar(tip, icon_type)

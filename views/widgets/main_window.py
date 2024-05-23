@@ -12,11 +12,14 @@ from PySide6.QtGui import (QIcon, QAction)
 from PySide6.QtWidgets import (QMainWindow, QApplication, QSizeGrip, QPushButton, QMessageBox, QWidget)
 
 from config import (ViewConfig, DarkConfig, LightConfig)
-from views.ui_components import (create_width_animation, create_animation_group, apply_shadow_effect)
+from views.ui_components import (
+    create_width_animation, create_animation_group, apply_shadow_effect, create_opacity_animation
+)
 from views.ui_designs import Ui_MainWindow
 from views.widgets import CustomGrip
 
 from utils import get_resource_path
+from views.widgets import InfoBarWindow
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -43,6 +46,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.dark_theme: bool = bool(1)
         self.current_selected_btn: str = 'btn_page_home'
         self.config = DarkConfig
+        # 信息栏窗口设置
+        self.infobars = list()
+        self.installEventFilter(self)  # 安装事件过滤器以跟踪窗口移动
         #
         self.initialize_view()
         self.setup_connections()
@@ -377,6 +383,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if event.buttons() == Qt.LeftButton:
             self.move(event.globalPos() - self.move_position)
             event.accept()
+
+    def add_infobar(self, message, icon_type):
+        if len(self.infobars) >= 3:
+            bar_to_remove = self.infobars.pop(0)
+            bar_to_remove.close_animation()
+        new_bar = InfoBarWindow(self, message, icon_type)
+        self.infobars.append(new_bar)
+        self.update_infobars_position()
+        new_bar.show_animation()
+
+    def update_infobars_position(self, immediate: bool = False):
+        """更新 InfoBars 的位置。
+
+        Args:
+            immediate (bool, optional): 如果为 True，则立即更新位置，而不是使用动画。
+        """
+        for bar in self.infobars:
+            end_pos = bar.calculate_end_pos()
+            if immediate:
+                bar.move(end_pos)
+            else:
+                bar.animation = create_opacity_animation(bar, bar.pos(), end_pos, 800, b"pos")
+                bar.animation.start()
+
+    def eventFilter(self, source, event):
+        """拦截窗口移动事件"""
+        if event.type() == QEvent.Move:
+            self.update_infobars_position(immediate=True)
+        return super().eventFilter(source, event)
 
     def mousePressEvent(self, event):
         """鼠标点击事件"""

@@ -45,10 +45,12 @@ class SendMessageTask(TaskRunnable):
         check_pause = self.kwargs.get('check_pause')
         updatedProgressSignal = self.kwargs.get('updatedProgressSignal')
         recordExecInfoSignal = self.kwargs.get('recordExecInfoSignal')
+        showInfoBarSignal = self.kwargs.get('showInfoBarSignal')
 
         names = message_info.pop('names')
         exec_info_map = dict()
         for idx, name in enumerate(names):
+            infobar_info = [bool(), str()]
             check_pause()
             try:
                 exec_info_map.update(
@@ -60,6 +62,7 @@ class SendMessageTask(TaskRunnable):
                     }
                 )
                 self.func(name, **message_info)
+                infobar_info = [True, f'{name} 发送成功']
             except (ValueError, TypeError, AssertionError, NameError) as e:
                 exec_info_map.update(
                     {
@@ -67,9 +70,11 @@ class SendMessageTask(TaskRunnable):
                         '备注': str(e)
                     }
                 )
+                infobar_info = [False, f'{name} {str(e)}']
             finally:
                 recordExecInfoSignal.emit(exec_info_map)
                 updatedProgressSignal.emit(idx + 1, len(names))  # 通知控制器任务完成
+                showInfoBarSignal.emit(*infobar_info)
 
 
 class GetNameListTask(TaskRunnable):
@@ -89,6 +94,7 @@ class ModelMain(QObject):
     toggleTaskStatusSignal = Signal(str)
     recordExecInfoSignal = Signal(dict)
     exportNameListSignal = Signal(bool, str)
+    showInfoBarSignal = Signal(bool, str)
 
     def __init__(self):
         super().__init__()
@@ -138,7 +144,8 @@ class ModelMain(QObject):
             message_info=message_info,
             updatedProgressSignal=updatedProgressSignal,
             toggleTaskStatusSignal=self.toggleTaskStatusSignal,
-            recordExecInfoSignal=self.recordExecInfoSignal
+            recordExecInfoSignal=self.recordExecInfoSignal,
+            showInfoBarSignal=self.showInfoBarSignal
         )
         self.thread_pool.start(runnable)
 
