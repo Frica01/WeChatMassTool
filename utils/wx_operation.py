@@ -74,17 +74,18 @@ class WxOperation:
         auto.SetClipboardText(text=name)
         time.sleep(Interval.BASE_INTERVAL)
         self.wx_window.SendKeys(text='{Ctrl}V', waitTime=Interval.BASE_INTERVAL)
-        for idx, item in enumerate(self.wx_window.ListControl(foundIndex=2).GetChildren()):
-            _name = item.Name
-            if idx == 0:  # 跳过第一个 标签
-                continue
-            if _name == "":
-                self.wx_window.SendKeys(text='{Esc}', waitTime=Interval.BASE_INTERVAL)  # 没有匹配的用户, 取消搜索
-                return False
-            if _name == name:
-                self.wx_window.SendKey(key=auto.SpecialKeyNames['ENTER'], waitTime=Interval.BASE_INTERVAL)
-                time.sleep(Interval.BASE_INTERVAL)
-                return True
+        # 若有匹配结果，第一个元素的类型为PaneControl
+        search_nodes = self.wx_window.ListControl(foundIndex=2).GetChildren()
+        if not isinstance(search_nodes.pop(0), auto.PaneControl):
+            self.wx_window.SendKeys(text='{Esc}', waitTime=Interval.BASE_INTERVAL)
+            raise ValueError("昵称不匹配")
+        # 只考虑全匹配, 不考虑好友昵称重名, 不考虑好友昵称与群聊重名
+        if search_nodes[0].Name == name:
+            self.wx_window.SendKey(key=auto.SpecialKeyNames['ENTER'], waitTime=Interval.BASE_INTERVAL)
+            time.sleep(Interval.BASE_INTERVAL)
+            return True
+        # 无匹配用户, 取消搜索框
+        self.wx_window.SendKeys(text='{Esc}', waitTime=Interval.BASE_INTERVAL)
         return False
 
     def at_at_everyone(self, group_chat_name: str):
