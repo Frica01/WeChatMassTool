@@ -7,3 +7,4 @@
 
 from views.ui_designs.ui_main import Ui_MainWindow
 from views.ui_designs.ui_login import Ui_Login
+from views.ui_designs.ui_infobar import Ui_InfoBar

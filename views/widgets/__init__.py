@@ -5,3 +5,4 @@
 # Description:
 
 from views.widgets.custom_grips import CustomGrip
+from views.widgets.infobar_window import InfoBarWindow
