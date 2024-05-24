@@ -3,11 +3,10 @@
 # Author:       小菜
 # Date:         2024/4/01 00:00
 # Description:
+
 import datetime
-import os
 import platform
 import sys
-import tempfile
 from ctypes import windll
 
 import PySide6
@@ -18,7 +17,10 @@ from cprint import cprint
 
 from config import (Animate, WeChat)
 from controllers import ControllerMain
-from utils import (get_specific_process, is_process_running, get_resource_path, get_config, minimize_wechat)
+from utils import (
+    get_specific_process, is_process_running, get_resource_path, get_config, minimize_wechat, write_file, delete_file,
+    file_exists, get_temp_file_path, read_file, get_pid
+)
 from version import (__version__, __project_name__, __author__)
 
 
@@ -85,29 +87,32 @@ def initialize_application():
     sys.exit(app.exec())
 
 
-def main():
-    """主入口"""
+def ensure_single_instance():
+    """用于保证只能有一个应用程序实例运行"""
     # 使用文件锁来保证单实例运行, 获取系统存储临时文件路径
-    lock_file = os.path.join(tempfile.gettempdir(), WeChat.APP_LOCK_NAME)
+    lock_file = get_temp_file_path(file_name=WeChat.APP_LOCK_NAME)
 
     # 检查并删除过时的锁文件
-    if os.path.exists(lock_file):
+    if file_exists(lock_file):
         try:
-            with open(lock_file) as f:
-                pid = int(f.read().strip())
             # 检查是否有进程在运行
-            if not is_process_running(pid=pid, proc_name=WeChat.APP_PROCESS_NAME):
-                os.remove(lock_file)
+            if not is_process_running(pid=read_file(lock_file)[0], proc_name=WeChat.APP_PROCESS_NAME):
+                delete_file(lock_file)
         except (FileExistsError, FileNotFoundError):
-            os.remove(lock_file)
+            delete_file(lock_file)
 
-    if os.path.exists(lock_file):
+    if file_exists(lock_file):
         print("另一个实例已经在运行。")
         sys.exit()
 
     # 创建锁文件
-    with open(lock_file, 'w') as f:
-        f.write(str(os.getpid()))
+    write_file(lock_file, data=[str(get_pid())])
+
+
+def main():
+    """主入口"""
+    # 保证只有一个应用实例运行
+    ensure_single_instance()
 
     # 正常走的流程
     set_app_user_model_id()
