@@ -6,7 +6,10 @@
 
 from utils.clipboard_utils import copy_files_to_clipboard
 from utils.config_utils import (get_config, write_config)
-from utils.file_io import (read_file, write_file, get_resource_path)
+from utils.file_io_utils import (
+    read_file, write_file, get_resource_path, get_pid, get_temp_file_path, file_exists, delete_file
+)
 from utils.process_utils import (get_specific_process, is_process_running)
 from utils.window_utils import (minimize_wechat, wake_up_window)
 from utils.wx_operation import WxOperation
+from utils.hash_utils import get_file_sha256

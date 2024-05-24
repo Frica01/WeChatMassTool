@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 # @Author : Frica01
 # @Time   : 2024/5/12 下午5:21
-# @Name   : file_io.py
+# @Name   : file_io_utils.py
 
 import os
 import sys
+import tempfile
+from typing import Optional
 
 import chardet
 
@@ -29,7 +31,7 @@ def read_file(file: str):
             result = chardet.detect(f.read(4096))
             encoding = result['encoding']
         with open(file, encoding=encoding) as f:
-            return f.read().split('\n')
+            return [line for line in f.read().split('\n') if line.strip()]
     except (FileNotFoundError, FileExistsError):
         ...
     finally:
@@ -71,3 +73,74 @@ def get_resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
+
+
+def get_pid():
+    """
+    返回当前进程id
+
+    Returns:
+        int: 进程id
+
+    Examples:
+        >>> get_pid()
+    """
+    return os.getpid()
+
+
+def get_temp_file_path(file_name: Optional[str] = None):
+    """
+    获取临时文件路径
+
+    该函数接收一个相对路径，并返回在系统临时目录中的完整路径
+
+    Args:
+        file_name (Optional[str]): 文件名
+
+    Returns:
+        str: 系统临时目录中该相对路径的完整路径
+
+    Examples:
+        >>> get_temp_file_path('example.txt')
+    """
+    if file_name:
+        return os.path.join(tempfile.gettempdir(), file_name)
+    return tempfile.gettempdir()
+
+
+def file_exists(file_path):
+    """
+    判断文件是否存在
+
+    Args:
+        file_path (str): 文件的路径
+
+    Returns:
+        bool: 如果文件存在返回 True，否则返回 False
+
+    Examples:
+        >>> file_exists('example.txt')
+    """
+    return os.path.isfile(file_path)
+
+
+def delete_file(file_path):
+    """
+    删除临时文件
+
+    该函数接收一个相对路径，并删除在系统临时目录中的对应文件
+
+    Args:
+        file_path(str): 文件路径
+
+    Returns:
+        bool: 如果文件成功删除返回 True，否则返回 False
+
+    Examples:
+        >>> delete_file('example.txt')
+    """
+
+    try:
+        os.remove(file_path)
+    except FileNotFoundError:
+        return False
