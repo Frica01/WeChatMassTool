@@ -4,13 +4,14 @@
 # Date:         2024/04/01 00:00
 # Description:
 
-
 from PySide6.QtCore import (QObject, QMutexLocker, QMutex, QWaitCondition, Slot)
 from PySide6.QtWidgets import (QFileDialog, QMessageBox)
 
 from config import (Animate, WeChat)
 from models import ModelMain
-from utils import (read_file, write_config)
+from utils import (
+    read_file, write_file, write_config, get_file_sha256, get_temp_file_path, path_exists, delete_file, join_path
+)
 from views import ViewMain
 
 
@@ -28,6 +29,8 @@ class ControllerMain(QObject):
         #
         self.setup_connections()
         self.name_list = list()
+        self.name_list_file = str()
+        self.sha256_cache_file = str()
         self.init_animate_radio_btn(flag=animate_on_startup)
 
     def setup_connections(self):
@@ -48,10 +51,12 @@ class ControllerMain(QObject):
         self.view.btn_export_result.clicked.connect(self.export_exec_result)
         # 添加 文件 QListWidget 控件右键菜单
         self.view.add_list_widget_menu()
-        # 进度条, 导出按钮 和 显示信息栏的 Signal
+        # 进度条, 导出按钮, 显示信息栏, 缓存进度, 删除缓存进度,的 Signal
         self.view.updatedProgressSignal.connect(self.view.update_progress)
         self.model.exportNameListSignal.connect(self.show_export_msg_box)
         self.model.showInfoBarSignal.connect(self.show_infobar)
+        self.model.cacheProgressSignal.connect(self.cache_progress)
+        self.model.deleteCacheProgressSignal.connect(self.delete_cache_progress)
         # 开启和关闭动画启动按钮
         self.view.radio_btn_animate_true.clicked.connect(self.set_animate_startup_status)
         self.view.radio_btn_animate_false.clicked.connect(self.set_animate_startup_status)
@@ -72,6 +77,7 @@ class ControllerMain(QObject):
             'file_paths': files,
             'names': names,
             'name_list': self.name_list,
+            'text_name_list_count': len(self.name_list),
             'add_remark_name': add_remark_name,
             'at_everyone': at_everyone,
             'text_interval': text_interval,
@@ -84,6 +90,7 @@ class ControllerMain(QObject):
         if name_list_file := QFileDialog.getOpenFileName(self.view, '选择文件', '', "Text Files (*.txt)")[0]:
             self.view.set_text_in_widget('import_name_list_line_edit', name_list_file)
             self.name_list = read_file(file=name_list_file)
+            self.name_list_file = name_list_file
             self.view.show_message_box('导入成功!', QMessageBox.Information)
         else:
             self.name_list = list()
@@ -118,6 +125,10 @@ class ControllerMain(QObject):
         """点击发送按钮触发的事件"""
         data = self.get_gui_info()
         print(data)
+
+        if cache_index := self.get_name_list_file_cache_index():
+            data['cache_index'] = cache_index
+
         self.model.send_wechat_message(
             data,
             check_pause=self.check_pause,
@@ -173,6 +184,22 @@ class ControllerMain(QObject):
         else:
             write_config(WeChat.APP_NAME, Animate.SECTION, Animate.OPTION, value=str(False))
 
+    def get_name_list_file_cache_index(self):
+        """
+        获取缓存进度的索引
+
+        Returns:
+            int: 缓存进度的索引
+        """
+        if self.name_list_file:
+            self.sha256_cache_file = get_temp_file_path(
+                join_path(WeChat.APP_NAME,  get_file_sha256(self.name_list_file) + '.tmp')
+            )
+            # print(self.sha256_cache_file)
+            if path_exists(self.sha256_cache_file):
+                return read_file(self.sha256_cache_file)[0]
+        return int(0)
+
     @Slot(bool, str)
     def show_export_msg_box(self, status, tip):
         """展示导出消息的弹窗"""
@@ -182,5 +209,12 @@ class ControllerMain(QObject):
     @Slot(bool, str)
     def show_infobar(self, status, tip):
         icon_type = 'success' if status else 'fail'
-        print(status, tip)
         self.view.add_infobar(tip, icon_type)
+
+    @Slot(str)
+    def cache_progress(self, index):
+        write_file(self.sha256_cache_file, data=[index])
+
+    @Slot(bool)
+    def delete_cache_progress(self, item):
+        delete_file(self.sha256_cache_file)
