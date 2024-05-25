@@ -46,35 +46,41 @@ class SendMessageTask(TaskRunnable):
         updatedProgressSignal = self.kwargs.get('updatedProgressSignal')
         recordExecInfoSignal = self.kwargs.get('recordExecInfoSignal')
         showInfoBarSignal = self.kwargs.get('showInfoBarSignal')
-
-        names = message_info.pop('names')
+        cacheProgressSignal = self.kwargs.get('cacheProgressSignal')
+        deleteCacheProgressSignal = self.kwargs.get('deleteCacheProgressSignal')
+        #
+        name_list = message_info.pop('name_list')
+        cache_index = int(message_info.pop('cache_index', int(0)))
+        text_name_list_count = int(message_info.pop('text_name_list_count', int(0)))
+        #
+        texts = '\n'.join(message_info.get('msgs', str()))
+        files = '\n'.join(message_info.get('file_paths', str()))
+        #
         exec_info_map = dict()
-        for idx, name in enumerate(names):
-            infobar_info = [bool(), str()]
-            check_pause()
-            try:
-                exec_info_map.update(
-                    {
-                        '昵称': name,
-                        '文本': '\n'.join(message_info.get('msgs', str())),
-                        '文件': '\n'.join(message_info.get('file_paths', str())),
-                        '状态': '成功'
-                    }
-                )
-                self.func(name, **message_info)
-                infobar_info = [True, f'{name} 发送成功']
-            except (ValueError, TypeError, AssertionError, NameError) as e:
-                exec_info_map.update(
-                    {
-                        '状态': '失败',
-                        '备注': str(e)
-                    }
-                )
-                infobar_info = [False, f'{name} {str(e)}']
-            finally:
-                recordExecInfoSignal.emit(exec_info_map)
-                updatedProgressSignal.emit(idx + 1, len(names))  # 通知控制器任务完成
-                showInfoBarSignal.emit(*infobar_info)
+        infobar_info = list()
+        #
+        for idx, name in enumerate(name_list):
+            # 不满足 (不存在缓存进度索引 和 当前索引小于进度索引) 就往下执行, 用于跳过以发送的用户
+            if not (cache_index and idx <= cache_index):
+                check_pause()  # 检查程序是否暂停
+                try:
+                    exec_info_map.update({'昵称': name, '文本': texts, '文件': files, '状态': '成功'})
+                    self.func(name, **message_info)
+                    infobar_info = [True, f'{name} 发送成功']
+                except (ValueError, TypeError, AssertionError, NameError) as e:
+                    exec_info_map.update({'状态': '失败', '备注': str(e)})
+                    infobar_info = [False, f'{name} {str(e)}']
+                finally:
+                    recordExecInfoSignal.emit(exec_info_map)
+                    showInfoBarSignal.emit(*infobar_info)
+                    # 触发缓存文件保存文件操作
+                    if text_name_list_count > (idx + 1):
+                        cacheProgressSignal.emit(str(idx))
+                    # 触发删除缓存进度索引文件
+                    if text_name_list_count == (idx + 1):
+                        deleteCacheProgressSignal.emit(True)
+            # 通知更新进度条
+            updatedProgressSignal.emit(idx + 1, len(name_list))  # 通知控制器任务完成
 
 
 class GetNameListTask(TaskRunnable):
@@ -95,6 +101,8 @@ class ModelMain(QObject):
     recordExecInfoSignal = Signal(dict)
     exportNameListSignal = Signal(bool, str)
     showInfoBarSignal = Signal(bool, str)
+    cacheProgressSignal = Signal(str)
+    deleteCacheProgressSignal = Signal(bool)
 
     def __init__(self):
         super().__init__()
@@ -145,15 +153,19 @@ class ModelMain(QObject):
             updatedProgressSignal=updatedProgressSignal,
             toggleTaskStatusSignal=self.toggleTaskStatusSignal,
             recordExecInfoSignal=self.recordExecInfoSignal,
-            showInfoBarSignal=self.showInfoBarSignal
+            showInfoBarSignal=self.showInfoBarSignal,
+            cacheProgressSignal=self.cacheProgressSignal,
+            deleteCacheProgressSignal=self.deleteCacheProgressSignal,
+
         )
         self.thread_pool.start(runnable)
 
     @staticmethod
     def process_message_info(message_info):
         # 处理昵称
-        message_info['names']: list = message_info['names'].split()
-        message_info['names'].extend(message_info.pop('name_list', list()))
+        message_info['name_list'].extend(message_info.pop('names', list()).split())
+        # 简单去重（导入名单和手动输入重复), 保持获取时候的顺序
+        message_info['name_list'] = list(dict.fromkeys(message_info['name_list']))
         # 处理消息
         msg_list = list()
         if signal_text := message_info.pop('single_text', None):

@@ -19,7 +19,7 @@ from config import (Animate, WeChat)
 from controllers import ControllerMain
 from utils import (
     get_specific_process, is_process_running, get_resource_path, get_config, minimize_wechat, write_file, delete_file,
-    file_exists, get_temp_file_path, read_file, get_pid
+    path_exists, get_temp_file_path, read_file, get_pid, delete_old_files_with_extension, join_path
 )
 from version import (__version__, __project_name__, __author__)
 
@@ -90,10 +90,10 @@ def initialize_application():
 def ensure_single_instance():
     """用于保证只能有一个应用程序实例运行"""
     # 使用文件锁来保证单实例运行, 获取系统存储临时文件路径
-    lock_file = get_temp_file_path(file_name=WeChat.APP_LOCK_NAME)
+    lock_file = get_temp_file_path(file_name=join_path(WeChat.APP_NAME, WeChat.APP_LOCK_NAME))
 
     # 检查并删除过时的锁文件
-    if file_exists(lock_file):
+    if path_exists(lock_file):
         try:
             # 检查是否有进程在运行
             if not is_process_running(pid=read_file(lock_file)[0], proc_name=WeChat.APP_PROCESS_NAME):
@@ -101,7 +101,7 @@ def ensure_single_instance():
         except (FileExistsError, FileNotFoundError):
             delete_file(lock_file)
 
-    if file_exists(lock_file):
+    if path_exists(lock_file):
         print("另一个实例已经在运行。")
         sys.exit()
 
@@ -111,6 +111,9 @@ def ensure_single_instance():
 
 def main():
     """主入口"""
+    # 删除三天前的进度缓存文件
+    delete_old_files_with_extension(get_temp_file_path(WeChat.APP_NAME), days=3, file_extension='.tmp')
+
     # 保证只有一个应用实例运行
     ensure_single_instance()
 

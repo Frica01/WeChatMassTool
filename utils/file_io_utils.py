@@ -78,7 +78,7 @@ def get_resource_path(relative_path):
     except AttributeError:
         base_path = os.path.abspath(".")
 
-    return os.path.join(base_path, relative_path)
+    return join_path(base_path, relative_path)
 
 
 def get_pid():
@@ -110,24 +110,25 @@ def get_temp_file_path(file_name: Optional[str] = None):
         >>> get_temp_file_path('example.txt')
     """
     if file_name:
-        return os.path.join(tempfile.gettempdir(), file_name)
+        return join_path(tempfile.gettempdir(), file_name)
     return tempfile.gettempdir()
 
 
-def file_exists(file_path):
+def path_exists(path):
     """
-    判断文件是否存在
+    判断文件或文件夹是否存在
 
     Args:
-        file_path (str): 文件的路径
+        path (str): 文件或文件夹的路径
 
     Returns:
-        bool: 如果文件存在返回 True，否则返回 False
+        bool: 如果路径存在返回 True，否则返回 False
 
     Examples:
-        >>> file_exists('example.txt')
+        >>> path_exists('example.txt')
+        >>> path_exists('/path/to/directory')
     """
-    return os.path.exists(file_path)
+    return os.path.exists(path)
 
 
 def delete_file(file_path):
@@ -167,7 +168,7 @@ def delete_old_files_with_extension(directory, days=3, file_extension='.tmp'):
     Examples:
         >>> delete_old_files_with_extension('路径', days=1)
     """
-    if not file_exists(directory):
+    if not path_exists(directory):
         print(f"'{directory}' 文件夹不存在")
         return
 
@@ -178,10 +179,26 @@ def delete_old_files_with_extension(directory, days=3, file_extension='.tmp'):
     for root, dirs, files in os.walk(directory):
         for file_name in files:
             if file_name.endswith(file_extension):
-                file_path = os.path.join(root, file_name)
+                file_path = join_path(root, file_name)
                 # 获取文件的创建时间
                 file_ctime = os.path.getctime(file_path)
                 # 如果文件的创建时间早于时间阈值，则删除文件
                 if file_ctime < cutoff:
                     print(f"Deleting file: {file_path}")  # 打印出删除的文件路径
                     delete_file(file_path)
+
+
+def join_path(*args):
+    """
+    连接多个路径组件，生成一个完整的路径
+
+    Args:
+        *args (str): 路径组件，可以是多个字符串参数
+
+    Returns:
+        str: 连接后的完整路径
+
+    Examples:
+        >>> join_path('folder', 'subfolder', 'file.txt')
+    """
+    return os.path.join(*args)
