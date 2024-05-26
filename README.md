@@ -5,12 +5,10 @@
 <img alt="PySide6" src="https://img.shields.io/badge/PySide6-Compatible-informational?style=flat&logo=qt&logoColor=white&color=41CD52"/>
 <img alt="PyQt6" src="https://img.shields.io/badge/PyQt6-Compatible-informational?style=flat&logo=qt&logoColor=white&color=41CD52"/>
 <img alt="License" src="https://img.shields.io/badge/license-MIT-green?style=flat&logo=opensourceinitiative&logoColor=white"/>
-
-<b>🔥微信群发工具：</b>完全免费开源使用的一款微信群发消息工具，现功能有：导出好友标签名单、导出运行结果、导入好友标签名单发送，因调用Windows API，发送速度嘎嘎快！
-<br>
-⭐ 只支持Windows系统用户使用，可以前往 [**Release**](#https://github.com/Frica01/WeChatMassTool/releases) 下载已编译的 exe 程序，无需安装，开箱即用。
-
 </div>
+<p><b>🔥微信群发工具：</b>完全免费开源使用的一款微信群发消息工具，现功能有：导出好友标签名单、导出运行结果、导入好友标签名单发送，因调用Windows API，发送速度嘎嘎快！</p>
+<p>⭐只支持Windows系统用户使用，可以前往 <a href="https://github.com/Frica01/WeChatMassTool/releases"><b>Release</b></a> 下载已编译的 exe 程序，无需安装，开箱即用。</p>
+
 
 # 微信群发工具
 
