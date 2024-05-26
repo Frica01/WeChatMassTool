@@ -6,6 +6,10 @@
 <img alt="PyQt6" src="https://img.shields.io/badge/PyQt6-Compatible-informational?style=flat&logo=qt&logoColor=white&color=41CD52"/>
 <img alt="License" src="https://img.shields.io/badge/license-MIT-green?style=flat&logo=opensourceinitiative&logoColor=white"/>
 
+<b>🔥微信群发工具：</b>完全免费开源使用的一款微信群发消息工具，现功能有：导出好友标签名单、导出运行结果、导入好友标签名单发送，因调用Windows API，发送速度嘎嘎快！
+<br>
+⭐ 只支持Windows系统用户使用，可以前往 [**Release**](#https://github.com/Frica01/WeChatMassTool/releases) 下载已编译的 exe 程序，无需安装，开箱即用。
+
 </div>
 
 # 微信群发工具
@@ -104,6 +108,7 @@
 - [x] **智能群发**：可以根据用户设置的标签或群组进行智能群发。
 - [x] **丰富的消息内容**：支持文本、图片、文件等多种类型的消息内容。
 - [x] **日志记录**：详细记录每次发送的结果，方便用户回查。
+- [x] **断点续传**：导入发送的名单中途停止或发送失败，在下次导入时候从失败的点继续发送。
 
 
 ### 待开发
@@ -135,8 +140,7 @@ WeChatMassTool/
 ├── utils/
 │   ├── __init__.py
 │   ├── utils.py
-│   ├── wx_operation.py
-│   └── wx_operation.py.bak
+│   └── wx_operation.py
 ├── views/               # MVC 中的视图组件，用户界面文件
 │   ├── resources/       # UI 资源，如图标、图片等
 │   │   ├── icons/

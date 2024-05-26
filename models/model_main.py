@@ -66,10 +66,10 @@ class SendMessageTask(TaskRunnable):
                 try:
                     exec_info_map.update({'昵称': name, '文本': texts, '文件': files, '状态': '成功'})
                     self.func(name, **message_info)
-                    infobar_info = [True, f'{name} 发送成功']
+                    infobar_info = [True, f'{name[:8]} 发送成功']
                 except (ValueError, TypeError, AssertionError, NameError) as e:
                     exec_info_map.update({'状态': '失败', '备注': str(e)})
-                    infobar_info = [False, f'{name} {str(e)}']
+                    infobar_info = [False, f'{name[:8]} {str(e)}']
                 finally:
                     recordExecInfoSignal.emit(exec_info_map)
                     showInfoBarSignal.emit(*infobar_info)
@@ -115,9 +115,6 @@ class ModelMain(QObject):
         self.task_status_map: Dict[str, bool] = defaultdict()  # 用于存放不同任务的状态
         self.toggleTaskStatusSignal.connect(self.change_task_status)
         self.recordExecInfoSignal.connect(self.record_exec_info)
-
-    def __del__(self):
-        self.record.cleanup()
 
     def export_name_list(self, tag, file_path):
         """导出标签好友名单"""

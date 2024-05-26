@@ -155,8 +155,10 @@ class ControllerMain(QObject):
     # noinspection PyUnresolvedReferences
     def export_exec_result(self):
         """导出运行结果"""
-        if self.model.record.export_exec_result_to_csv('运行结果.csv'):
-            self.view.show_message_box('导出成功!', QMessageBox.Information)
+        if file_path := QFileDialog.getSaveFileName(self.view, "Create File", "运行结果.csv", "CSV Files (*.csv)")[0]:
+            res = self.model.record.export_exec_result_to_csv(file_path)
+            icon = QMessageBox.Information if res.get('status') else QMessageBox.Critical
+            self.view.show_message_box(res.get('tip'), icon, duration=3000)
         else:
             self.view.show_message_box('导出失败!', QMessageBox.Critical, duration=3000)
 
@@ -193,7 +195,7 @@ class ControllerMain(QObject):
         """
         if self.name_list_file:
             self.sha256_cache_file = get_temp_file_path(
-                join_path(WeChat.APP_NAME,  get_file_sha256(self.name_list_file) + '.tmp')
+                join_path(WeChat.APP_NAME, get_file_sha256(self.name_list_file) + '.tmp')
             )
             # print(self.sha256_cache_file)
             if path_exists(self.sha256_cache_file):

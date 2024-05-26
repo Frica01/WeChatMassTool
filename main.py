@@ -113,6 +113,10 @@ def main():
     """主入口"""
     # 删除三天前的进度缓存文件
     delete_old_files_with_extension(get_temp_file_path(WeChat.APP_NAME), days=3, file_extension='.tmp')
+    # 删除运行缓存文件
+    delete_old_files_with_extension(
+        get_temp_file_path(join_path(WeChat.APP_NAME, '.cache')), days=0, file_extension='.pkl'
+    )
 
     # 保证只有一个应用实例运行
     ensure_single_instance()
@@ -125,3 +129,8 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# TODO
+#  1. 完善 .cache 的路径位置，放到临时存储
+#  2. 完善导出功能
+#  3. 补充完整README
