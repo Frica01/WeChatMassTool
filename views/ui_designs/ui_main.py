@@ -1106,7 +1106,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
         self.label = QLabel(self.frame_14)
         self.label.setObjectName(u"label")
-        self.label.setStyleSheet(u"font: 700 28pt \"Microsoft YaHei UI\";")
+        self.label.setStyleSheet(u"font: 700 28pt \"Microsoft YaHei UI\";\n"
+                                 "color: rgb(85, 255, 127);")
 
         self.horizontalLayout_9.addWidget(self.label, 0, Qt.AlignHCenter)
 
@@ -1747,7 +1748,7 @@ class Ui_MainWindow(object):
         # endif // QT_CONFIG(tooltip)
         self.closeAppBtn.setText("")
         self.label.setText(QCoreApplication.translate("MainWindow",
-                                                      u"\u8fd8\u4e0d\u77e5\u9053\u8fd9\u4e2a\u754c\u9762\u9700\u8981\u5b9e\u73b0\u4ec0\u4e48\u529f\u80fd\uff01",
+                                                      u"\u6b64\u9875\u9762\u5373\u5c06\u6dfb\u52a0\u670b\u53cb\u5708\u70b9\u8d5e\u529f\u80fd\u3002",
                                                       None))
         self.single_line_msg_text_edit.setPlaceholderText(QCoreApplication.translate("MainWindow",
                                                                                      u"\u5728\u6b64\u5904\u8f93\u5165\u6d88\u606f\uff0c\u4e00\u884c\u4e3a\u4e00\u6761\u6d88\u606f",

@@ -7,10 +7,11 @@
 from PySide6.QtCore import (QObject, QMutexLocker, QMutex, QWaitCondition, Slot)
 from PySide6.QtWidgets import (QFileDialog, QMessageBox)
 
-from config import (Animate, WeChat)
+from config import (Animate, WeChat, TUTORIAL_LINK)
 from models import ModelMain
 from utils import (
-    read_file, write_file, write_config, get_file_sha256, get_temp_file_path, path_exists, delete_file, join_path
+    read_file, write_file, write_config, get_file_sha256, get_temp_file_path, path_exists, delete_file, join_path,
+    open_webpage
 )
 from views import ViewMain
 
@@ -60,6 +61,8 @@ class ControllerMain(QObject):
         # 开启和关闭动画启动按钮
         self.view.radio_btn_animate_true.clicked.connect(self.set_animate_startup_status)
         self.view.radio_btn_animate_false.clicked.connect(self.set_animate_startup_status)
+        # 双击打开教程
+        self.view.textEdit.mouseDoubleClickEvent = lambda x: open_webpage(TUTORIAL_LINK)
 
     def get_gui_info(self):
         """获取当前面板填写的信息"""

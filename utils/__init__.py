@@ -14,3 +14,4 @@ from utils.process_utils import (get_specific_process, is_process_running)
 from utils.window_utils import (minimize_wechat, wake_up_window)
 from utils.wx_operation import WxOperation
 from utils.hash_utils import get_file_sha256
+from utils.browser_utils import open_webpage

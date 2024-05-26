@@ -129,8 +129,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# TODO
-#  1. 完善 .cache 的路径位置，放到临时存储
-#  2. 完善导出功能
-#  3. 补充完整README
