@@ -8,6 +8,8 @@
 </div>
 <p><b>🔥微信群发工具：</b>完全免费开源使用的一款微信群发消息工具，现功能有：导出好友标签名单、导出运行结果、导入好友标签名单发送，因调用Windows API，发送速度嘎嘎快！</p>
 <p>⭐只支持Windows系统用户使用，可以前往 <a href="https://github.com/Frica01/WeChatMassTool/releases"><b>Release</b></a> 下载已编译的 exe 程序，无需安装，开箱即用。</p>
+<p>✨最最最重要的一点是：不会封号！不会封号！！不会封号！！！安全。不像使用 `WeChat Hook` 的，有封号的风险。</p>
+
 
 
 # 微信群发工具
