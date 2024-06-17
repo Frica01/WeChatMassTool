@@ -140,35 +140,35 @@ class ModelMain(QObject):
             return
         self.toggleTaskStatusSignal.emit(task_id)
 
-        # 处理数据
-        message_info = self.process_message_info(message_info=message_info)
         runnable = SendMessageTask(
             self.wx.send_msg,
             task_id=task_id,
             check_pause=check_pause,
-            message_info=message_info,
+            message_info=self.process_message_info(message_info=message_info),
             updatedProgressSignal=updatedProgressSignal,
             toggleTaskStatusSignal=self.toggleTaskStatusSignal,
             recordExecInfoSignal=self.recordExecInfoSignal,
             showInfoBarSignal=self.showInfoBarSignal,
             cacheProgressSignal=self.cacheProgressSignal,
-            deleteCacheProgressSignal=self.deleteCacheProgressSignal,
-
+            deleteCacheProgressSignal=self.deleteCacheProgressSignal
         )
         self.thread_pool.start(runnable)
 
     @staticmethod
     def process_message_info(message_info):
-        # 处理昵称
-        message_info['name_list'].extend(message_info.pop('names', list()).split())
+        # 处理昵称，以换行符为分割
+        message_info['name_list'].extend(message_info.pop('names', list()).split('\n'))
+
         # 简单去重（导入名单和手动输入重复), 保持获取时候的顺序
         message_info['name_list'] = list(dict.fromkeys(message_info['name_list']))
+
         # 处理消息
         msg_list = list()
         if signal_text := message_info.pop('single_text', None):
             msg_list.extend(signal_text.split('\n'))
         if multi_text := message_info.pop('multi_text', None):
             msg_list.append(multi_text)
+
         message_info['msgs'] = msg_list
         return message_info
 
