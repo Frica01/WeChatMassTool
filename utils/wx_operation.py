@@ -111,7 +111,7 @@ class WxOperation:
             self.input_edit.SendKeys(text='{Enter}', waitTime=Interval.BASE_INTERVAL)
             self.input_edit.SendKeys(text='{Enter}', waitTime=Interval.BASE_INTERVAL)
 
-    def __send_text(self, *msgs, wait_time) -> None:
+    def __send_text(self, *msgs, wait_time, send_shortcut) -> None:
         """
         发送文本.
 
@@ -119,6 +119,7 @@ class WxOperation:
             input_name(str): 必选参数, 为输入框
             *msgs(str): 必选参数，为发送的文本
             wait_time(float): 必选参数，为动态等待时间
+            send_shortcut(str): 必选参数，为发送快捷键
 
         Returns:
             None
@@ -143,15 +144,16 @@ class WxOperation:
                 self.input_edit.SendKeys(text=msg, waitTime=wait_time * 2)
 
             # 设置到剪切板再黏贴到输入框
-            self.wx_window.SendKey(key=auto.SpecialKeyNames['ENTER'], waitTime=wait_time * 2)
+            self.wx_window.SendKeys(text=f'{send_shortcut}', waitTime=wait_time * 2)
 
-    def __send_file(self, *file_paths, wait_time) -> None:
+    def __send_file(self, *file_paths, wait_time, send_shortcut) -> None:
         """
         发送文件.
 
         Args:
             *file_paths(str): 必选参数，为文件的路径
             wait_time(float): 必选参数，为动态等待时间
+            send_shortcut(str): 必选参数，为发送快捷键
 
         Returns:
             None
@@ -161,7 +163,8 @@ class WxOperation:
         # 粘贴
         self.input_edit.SendKeys(text='{Ctrl}V', waitTime=wait_time)
         # 按下回车键
-        self.wx_window.SendKey(key=auto.SpecialKeyNames['ENTER'], waitTime=wait_time)
+        self.wx_window.SendKeys(text=f'{send_shortcut}', waitTime=wait_time)
+
         time.sleep(wait_time)  # 等待发送动作完成
 
     def get_friend_list(self, tag: str = None) -> list:
@@ -231,7 +234,8 @@ class WxOperation:
         return name_list
 
     def send_msg(self, name, msgs=None, file_paths=None, add_remark_name=False, at_everyone=False,
-                 text_interval=Interval.SEND_TEXT_INTERVAL, file_interval=Interval.SEND_FILE_INTERVAL) -> None:
+                 text_interval=Interval.SEND_TEXT_INTERVAL, file_interval=Interval.SEND_FILE_INTERVAL,
+                 send_shortcut='{Enter}') -> None:
         """
         发送消息，可同时发送文本和文件（至少选一项
 
@@ -243,11 +247,13 @@ class WxOperation:
             at_everyone(bool): 可选参数，是否@全部人
             text_interval(float): 可选参数，默认为0.05
             file_interval(float): 可选参数，默认为0.5
+            send_shortcut(str): 可选参数，默认为 Enter
 
         Raises:
             ValueError: 如果用户名为空或发送的消息和文件同时为空时抛出异常
             TypeError: 如果发送的文本消息或文件路径类型不是列表或元组时抛出异常
         """
+        print(send_shortcut, send_shortcut)
         if not name:
             raise ValueError("用户名不能为空")
 
@@ -280,11 +286,11 @@ class WxOperation:
         if msgs and add_remark_name:
             new_msgs = deepcopy(list(msgs))
             new_msgs.insert(0, name)
-            self.__send_text(*new_msgs, wait_time=text_interval)
+            self.__send_text(*new_msgs, wait_time=text_interval, send_shortcut=send_shortcut)
         elif msgs:
-            self.__send_text(*msgs, wait_time=text_interval)
+            self.__send_text(*msgs, wait_time=text_interval, send_shortcut=send_shortcut)
         if file_paths:
-            self.__send_file(*file_paths, wait_time=file_interval)
+            self.__send_file(*file_paths, wait_time=file_interval, send_shortcut=send_shortcut)
 
 
 if __name__ == '__main__':

@@ -8,15 +8,12 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
-                            QSize, Qt)
-from PySide6.QtGui import (QCursor,
-                           QFont, QIcon)
-from PySide6.QtWidgets import (QComboBox, QFrame, QGridLayout,
-                               QHBoxLayout, QLabel, QLineEdit, QListWidget,
-                               QProgressBar, QPushButton,
-                               QRadioButton, QSizePolicy, QStackedWidget, QTextEdit,
-                               QVBoxLayout, QWidget)
+from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect, QSize, Qt)
+from PySide6.QtGui import (QCursor, QFont, QIcon)
+from PySide6.QtWidgets import (
+    QComboBox, QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QListWidget, QProgressBar, QPushButton,
+    QRadioButton, QSizePolicy, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
+)
 
 from .resources_rc import *
 
@@ -844,6 +841,33 @@ class Ui_MainWindow(object):
         self.horizontalLayout_11.addWidget(self.radio_btn_animate_false)
 
         self.verticalLayout_11.addWidget(self.frame_15, 0, Qt.AlignLeft)
+
+        self.frame_17 = QFrame(self.extraTopMenu)
+        self.frame_17.setObjectName(u"frame_17")
+        self.frame_17.setMinimumSize(QSize(0, 40))
+        self.frame_17.setFrameShape(QFrame.StyledPanel)
+        self.frame_17.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_19 = QHBoxLayout(self.frame_17)
+        self.horizontalLayout_19.setSpacing(20)
+        self.horizontalLayout_19.setObjectName(u"horizontalLayout_19")
+        self.horizontalLayout_19.setContentsMargins(0, 0, 0, 0)
+        self.label_7 = QLabel(self.frame_17)
+        self.label_7.setObjectName(u"label_7")
+
+        self.horizontalLayout_19.addWidget(self.label_7)
+
+        self.radio_btn_enter = QRadioButton(self.frame_17)
+        self.radio_btn_enter.setObjectName(u"radio_btn_enter")
+        self.radio_btn_enter.setChecked(True)
+
+        self.horizontalLayout_19.addWidget(self.radio_btn_enter)
+
+        self.radio_btn_ctrl_enter = QRadioButton(self.frame_17)
+        self.radio_btn_ctrl_enter.setObjectName(u"radio_btn_ctrl_enter")
+
+        self.horizontalLayout_19.addWidget(self.radio_btn_ctrl_enter)
+
+        self.verticalLayout_11.addWidget(self.frame_17, 0, Qt.AlignLeft)
 
         self.frame_5 = QFrame(self.extraTopMenu)
         self.frame_5.setObjectName(u"frame_5")
@@ -1693,8 +1717,11 @@ class Ui_MainWindow(object):
         self.cb_file_interval.setItemText(9, QCoreApplication.translate("MainWindow", u"5.0", None))
 
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u662f\u5426\u52a8\u753b\u542f\u52a8", None))
-        self.radio_btn_animate_true.setText(QCoreApplication.translate("MainWindow", u"\u662f", None))
+        self.radio_btn_animate_true.setText(QCoreApplication.translate("MainWindow", u"\u662f     ", None))
         self.radio_btn_animate_false.setText(QCoreApplication.translate("MainWindow", u"\u5426", None))
+        self.label_7.setText(QCoreApplication.translate("MainWindow", u"\u5fae\u4fe1\u53d1\u9001\u6d88\u606f", None))
+        self.radio_btn_enter.setText(QCoreApplication.translate("MainWindow", u"Enter", None))
+        self.radio_btn_ctrl_enter.setText(QCoreApplication.translate("MainWindow", u"Ctrl + Enter", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u5bfc\u5165\u597d\u53cb\u540d\u5355", None))
         self.btn_import_name_list.setText(QCoreApplication.translate("MainWindow", u"\u5bfc\u5165", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u5bfc\u51fa\u597d\u53cb\u540d\u5355", None))

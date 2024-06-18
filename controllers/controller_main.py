@@ -74,6 +74,7 @@ class ControllerMain(QObject):
         at_everyone = True if self.view.rb_at_everyone.isChecked() else False
         text_interval = float(self.view.cb_text_interval.currentText())
         file_interval = float(self.view.cb_file_interval.currentText())
+        send_shortcut = '{Enter}' if self.view.radio_btn_enter.isChecked() else '{Ctrl}{Enter}'
         return {
             'single_text': single_text,
             'multi_text': multi_text,
@@ -85,6 +86,7 @@ class ControllerMain(QObject):
             'at_everyone': at_everyone,
             'text_interval': text_interval,
             'file_interval': file_interval,
+            'send_shortcut': send_shortcut
         }
 
     # noinspection PyUnresolvedReferences
