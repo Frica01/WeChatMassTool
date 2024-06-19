@@ -253,7 +253,6 @@ class WxOperation:
             ValueError: 如果用户名为空或发送的消息和文件同时为空时抛出异常
             TypeError: 如果发送的文本消息或文件路径类型不是列表或元组时抛出异常
         """
-        print(send_shortcut, send_shortcut)
         if not name:
             raise ValueError("用户名不能为空")
 
@@ -298,4 +297,3 @@ if __name__ == '__main__':
     data = wx.get_friend_list('无标签')
     print(data)
     print(data.__len__())
-    print(123)

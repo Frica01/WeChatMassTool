@@ -157,7 +157,8 @@ class ModelMain(QObject):
     @staticmethod
     def process_message_info(message_info):
         # 处理昵称，以换行符为分割
-        message_info['name_list'].extend(message_info.pop('names', list()).split('\n'))
+        if names := message_info.pop('names', list()):
+            message_info['name_list'].extend(names.split('\n'))
 
         # 简单去重（导入名单和手动输入重复), 保持获取时候的顺序
         message_info['name_list'] = list(dict.fromkeys(message_info['name_list']))
