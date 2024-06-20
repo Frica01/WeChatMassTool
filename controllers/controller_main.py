@@ -211,7 +211,7 @@ class ControllerMain(QObject):
 
     def update_task_progress(self):
         """初始化更新progress的数量"""
-        count = len(self.name_list) + len(self.view.name_text_edit.toPlainText().split('\n'))
+        count = len(self.name_list) + len(_.split('\n') if (_ := self.view.name_text_edit.toPlainText()) else list())
         self.view.updatedProgressSignal.emit(0, count)
 
     @Slot(bool, str)
