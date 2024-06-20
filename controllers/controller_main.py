@@ -101,6 +101,8 @@ class ControllerMain(QObject):
             self.name_list = list()
             self.view.set_text_in_widget('import_name_list_line_edit', '')
             self.view.show_message_box('导入失败!', QMessageBox.Critical, duration=3000)
+        # 简单更新progress的数量
+        self.update_task_progress()
 
     def import_send_file_list(self, new_files):
         """导入发送名单"""
@@ -206,6 +208,11 @@ class ControllerMain(QObject):
             if path_exists(self.sha256_cache_file):
                 return read_file(self.sha256_cache_file)[0]
         return int(0)
+
+    def update_task_progress(self):
+        """初始化更新progress的数量"""
+        count = len(self.name_list) + len(self.view.name_text_edit.toPlainText().split('\n'))
+        self.view.updatedProgressSignal.emit(0, count)
 
     @Slot(bool, str)
     def show_export_msg_box(self, status, tip):

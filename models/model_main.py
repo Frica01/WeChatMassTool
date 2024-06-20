@@ -58,6 +58,8 @@ class SendMessageTask(TaskRunnable):
         #
         exec_info_map = dict()
         infobar_info = list()
+        # 首先更新 progress 进度条
+        updatedProgressSignal.emit(0, len(name_list))
         #
         for idx, name in enumerate(name_list):
             # 不满足 (不存在缓存进度索引 和 当前索引小于进度索引) 就往下执行, 用于跳过以发送的用户
