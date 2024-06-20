@@ -30,7 +30,7 @@ def read_file(file: str):
         # 检测文件的编码
         with open(file, 'rb') as f:
             result = chardet.detect(f.read(4096))
-            encoding = result['encoding']
+            encoding = result['encoding'] or 'utf-8'
         with open(file, encoding=encoding) as f:
             return [line for line in f.read().split('\n') if line.strip()]
     except (FileNotFoundError, FileExistsError):
