@@ -214,7 +214,7 @@ class WxOperation:
                 remark_name = node.ButtonControl(foundIndex=2).Name  # 用户备注名，索引1会错位，索引2是备注名，索引3是标签名
                 name_list.append(remark_name if remark_name else nick_name)
             # 向下滚动页面
-            contacts_window.WheelDown(wheelTimes=10, waitTime=Interval.BASE_INTERVAL / 2)
+            contacts_window.WheelDown(wheelTimes=8, waitTime=Interval.BASE_INTERVAL / 2)
         # 结束时候关闭 "通讯录管理" 窗口
         contacts_window.SendKey(auto.SpecialKeyNames['ESC'])
         # 简单去重，但是存在误判（如果存在同名的好友), 保持获取时候的顺序
