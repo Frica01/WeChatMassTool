@@ -12,7 +12,7 @@ on:
   #     - master
 
   # 手动触发工作流
-  workflow_dispatch: true
+  workflow_dispatch: 
 
 permissions:
   contents: write
