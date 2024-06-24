@@ -4,7 +4,7 @@
 # Date:         2024/3/22 15:19
 # Description:
 
-TUTORIAL_LINK = 'https://www.bilibili.com/video/BV1v1421z7Rq'
+TUTORIAL_LINK = 'https://www.bilibili.com/video/BV1rz421B7Uw/'
 
 
 class AnimateConfig:
