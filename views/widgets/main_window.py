@@ -242,12 +242,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         target_left_width = ViewConfig.LEFT_BOX_WIDTH if (left_width == 0 and direction == "left") else 0
         target_right_width = ViewConfig.RIGHT_BOX_WIDTH if (right_width == 0 and direction == "right") else 0
 
-        # 先判断是否为添加默认样式
-        if add_default_style:
-            self.toggleLeftBox.setStyleSheet(left_style + color_map.get('left')) if left_width else None
-            self.settingsTopBtn.setStyleSheet(right_style + color_map.get('right')) if right_width else None
-            return
-
         # 根据当前面板的宽度和方向，调整按钮样式
         if target_left_width and not target_right_width:
             # 展开左侧面板，应用左侧按钮样式，并移除右侧按钮样式

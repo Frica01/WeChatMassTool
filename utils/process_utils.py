@@ -15,7 +15,7 @@ def get_specific_process(proc_name: str = 'WeChat.exe') -> bool:
 
 def is_process_running(pid: Union[int, str], proc_name: str):
     """使用 WMI 检查给定的 PID 是否在运行状态"""
-    # None 表示运行中, 判断进程是否运行切是否为
+    # None 表示运行中, 判断指定进程id是否在运行中
     return any(
         process.ExecutionState is None and process.Name == proc_name for process in
         wmi.WMI().Win32_Process(ProcessId=pid)
