@@ -43,3 +43,22 @@ def wake_up_window(class_name, name):
             win32gui.SetForegroundWindow(hwnd)
         except Exception as e:
             print(f"尝试将窗口置前时出错: {e}")
+
+
+def is_window_visible(class_name, name):
+    """
+    唤醒Windows 窗口的可见性
+
+    Args:
+        name(str):  进程名
+        class_name(str):  进程class_name
+
+    Returns:
+
+    """
+    if hwnd := win32gui.FindWindow(class_name, name):
+        # 判断窗口可见性
+        if win32gui.IsWindowVisible(hwnd):
+            return True
+    return False
+

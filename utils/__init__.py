@@ -11,7 +11,7 @@ from utils.file_io_utils import (
     delete_old_files_with_extension, join_path
 )
 from utils.process_utils import (get_specific_process, is_process_running)
-from utils.window_utils import (minimize_wechat, wake_up_window)
+from utils.window_utils import (minimize_wechat, wake_up_window, is_window_visible)
 from utils.wx_operation import WxOperation
 from utils.hash_utils import get_file_sha256
 from utils.browser_utils import open_webpage

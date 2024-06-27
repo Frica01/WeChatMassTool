@@ -3,6 +3,7 @@
 # Author:       小菜
 # Date:         2024/04/01 00:00
 # Description:
+from copy import deepcopy
 
 from PySide6.QtCore import (QObject, QMutexLocker, QMutex, QWaitCondition, Slot)
 from PySide6.QtWidgets import (QFileDialog, QMessageBox)
@@ -80,7 +81,7 @@ class ControllerMain(QObject):
             'multi_text': multi_text,
             'file_paths': files,
             'names': names,
-            'name_list': self.name_list,
+            'name_list': deepcopy(self.name_list),
             'text_name_list_count': len(self.name_list),
             'add_remark_name': add_remark_name,
             'at_everyone': at_everyone,

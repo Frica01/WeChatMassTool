@@ -12,7 +12,7 @@ from typing import Iterable
 import uiautomation as auto
 
 from config import (WeChat, Interval)
-from utils import (copy_files_to_clipboard, wake_up_window)
+from utils import (copy_files_to_clipboard, wake_up_window, is_window_visible)
 
 
 class WxOperation:
@@ -42,13 +42,25 @@ class WxOperation:
     """
 
     def __init__(self):
+        self.wx_window = None
+        self.input_edit = None
+        self.wx_window: auto.WindowControl
+        self.input_edit: auto.EditControl
         auto.SetGlobalSearchTimeout(Interval.BASE_INTERVAL)
         # Windows系统层面唤醒微信窗口
-        wake_up_window(class_name=WeChat.WINDOW_CLASSNAME, name=WeChat.WINDOW_NAME)
-        self.wx_window = auto.WindowControl(Name=WeChat.WINDOW_NAME, ClassName=WeChat.WINDOW_CLASSNAME)
-        if not self.wx_window.Exists(Interval.MAX_SEARCH_SECOND, searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
-            raise Exception('微信似乎并没有登录!')
-        self.input_edit = self.wx_window.EditControl()
+        # wake_up_window(class_name=WeChat.WINDOW_CLASSNAME, name=WeChat.WINDOW_NAME)
+        # self.wx_window = auto.WindowControl(Name=WeChat.WINDOW_NAME, ClassName=WeChat.WINDOW_CLASSNAME)
+        # if not self.wx_window.Exists(Interval.MAX_SEARCH_SECOND, searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
+        #     raise Exception('微信似乎并没有登录!')
+        # self.input_edit = self.wx_window.EditControl()
+
+    def locate_wechat_window(self):
+        if not is_window_visible(class_name=WeChat.WINDOW_CLASSNAME, name=WeChat.WINDOW_NAME):
+            wake_up_window(class_name=WeChat.WINDOW_CLASSNAME, name=WeChat.WINDOW_NAME)
+            self.wx_window = auto.WindowControl(Name=WeChat.WINDOW_NAME, ClassName=WeChat.WINDOW_CLASSNAME)
+            if not self.wx_window.Exists(Interval.MAX_SEARCH_SECOND, searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
+                raise Exception('微信似乎并没有登录!')
+            self.input_edit = self.wx_window.EditControl()
 
     def __match_nickname(self, name) -> bool:
         """获取当前面板的好友昵称"""
@@ -253,6 +265,12 @@ class WxOperation:
             ValueError: 如果用户名为空或发送的消息和文件同时为空时抛出异常
             TypeError: 如果发送的文本消息或文件路径类型不是列表或元组时抛出异常
         """
+
+        # 定位到微信窗口
+        self.locate_wechat_window()
+        # 窗口置顶
+        self.wx_window.SetTopmost(isTopmost=True)
+
         if not name:
             raise ValueError("用户名不能为空")
 
@@ -290,6 +308,9 @@ class WxOperation:
             self.__send_text(*msgs, wait_time=text_interval, send_shortcut=send_shortcut)
         if file_paths:
             self.__send_file(*file_paths, wait_time=file_interval, send_shortcut=send_shortcut)
+
+        # 窗口取消置顶
+        self.wx_window.SetTopmost(isTopmost=False)
 
 
 if __name__ == '__main__':
