@@ -47,20 +47,16 @@ class WxOperation:
         self.wx_window: auto.WindowControl
         self.input_edit: auto.EditControl
         auto.SetGlobalSearchTimeout(Interval.BASE_INTERVAL)
-        # Windows系统层面唤醒微信窗口
-        # wake_up_window(class_name=WeChat.WINDOW_CLASSNAME, name=WeChat.WINDOW_NAME)
-        # self.wx_window = auto.WindowControl(Name=WeChat.WINDOW_NAME, ClassName=WeChat.WINDOW_CLASSNAME)
-        # if not self.wx_window.Exists(Interval.MAX_SEARCH_SECOND, searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
-        #     raise Exception('微信似乎并没有登录!')
-        # self.input_edit = self.wx_window.EditControl()
+        self.visible_flag: bool = False
 
     def locate_wechat_window(self):
-        if not is_window_visible(class_name=WeChat.WINDOW_CLASSNAME, name=WeChat.WINDOW_NAME):
+        if not self.visible_flag:
             wake_up_window(class_name=WeChat.WINDOW_CLASSNAME, name=WeChat.WINDOW_NAME)
             self.wx_window = auto.WindowControl(Name=WeChat.WINDOW_NAME, ClassName=WeChat.WINDOW_CLASSNAME)
             if not self.wx_window.Exists(Interval.MAX_SEARCH_SECOND, searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
                 raise Exception('微信似乎并没有登录!')
             self.input_edit = self.wx_window.EditControl()
+            self.visible_flag = bool(self.visible_flag)
 
     def __match_nickname(self, name) -> bool:
         """获取当前面板的好友昵称"""
@@ -171,13 +167,14 @@ class WxOperation:
             None
         """
         # 复制文件到剪切板
-        copy_files_to_clipboard(file_paths=file_paths)
-        # 粘贴
-        self.input_edit.SendKeys(text='{Ctrl}V', waitTime=wait_time)
-        # 按下回车键
-        self.wx_window.SendKeys(text=f'{send_shortcut}', waitTime=wait_time)
+        if copy_files_to_clipboard(file_paths=file_paths):
+            # 粘贴到输入框
+            self.input_edit.SendKeys(text='{Ctrl}V', waitTime=wait_time)
+            self.input_edit.SendKeys(text='{Ctrl}V', waitTime=wait_time / 2)
+            # 按下回车键
+            self.wx_window.SendKeys(text=f'{send_shortcut}', waitTime=wait_time / 2)
 
-        time.sleep(wait_time)  # 等待发送动作完成
+            time.sleep(wait_time)  # 等待发送动作完成
 
     def get_friend_list(self, tag: str = None) -> list:
         """

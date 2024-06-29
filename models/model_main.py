@@ -57,7 +57,7 @@ class SendMessageTask(TaskRunnable):
         files = '\n'.join(message_info.get('file_paths', str()))
         #
         exec_info_map = dict()
-        infobar_info = list()
+        infobar_info = [0, 0]
         # 首先更新 progress 进度条
         updatedProgressSignal.emit(0, len(name_list))
         #
