@@ -170,7 +170,6 @@ class WxOperation:
         if copy_files_to_clipboard(file_paths=file_paths):
             # 粘贴到输入框
             self.input_edit.SendKeys(text='{Ctrl}V', waitTime=wait_time)
-            self.input_edit.SendKeys(text='{Ctrl}V', waitTime=wait_time / 2)
             # 按下回车键
             self.wx_window.SendKeys(text=f'{send_shortcut}', waitTime=wait_time / 2)
 
