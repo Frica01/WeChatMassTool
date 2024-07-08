@@ -57,6 +57,8 @@ class WxOperation:
                 raise Exception('微信似乎并没有登录!')
             self.input_edit = self.wx_window.EditControl()
             self.visible_flag = bool(self.visible_flag)
+        # 微信窗口置顶
+        self.wx_window.SetTopmost(isTopmost=True)
 
     def __match_nickname(self, name) -> bool:
         """获取当前面板的好友昵称"""
@@ -185,6 +187,10 @@ class WxOperation:
         Returns:
             list
         """
+        # 定位到微信窗口
+        self.locate_wechat_window()
+        # 取消微信窗口置顶
+        self.wx_window.SetTopmost(isTopmost=False)
         # 点击 通讯录管理
         self.wx_window.ButtonControl(Name="通讯录").Click(simulateMove=False)
         self.wx_window.ListControl(Name="联系人").ButtonControl(Name="通讯录管理").Click(simulateMove=False)
@@ -264,8 +270,6 @@ class WxOperation:
 
         # 定位到微信窗口
         self.locate_wechat_window()
-        # 窗口置顶
-        self.wx_window.SetTopmost(isTopmost=True)
 
         if not name:
             raise ValueError("用户名不能为空")
@@ -305,7 +309,7 @@ class WxOperation:
         if file_paths:
             self.__send_file(*file_paths, wait_time=file_interval, send_shortcut=send_shortcut)
 
-        # 窗口取消置顶
+        # 取消微信窗口置顶
         self.wx_window.SetTopmost(isTopmost=False)
 
 
