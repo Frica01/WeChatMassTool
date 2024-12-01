@@ -1,20 +1,10 @@
 # -*- coding: utf-8 -*-
 
-################################################################################
-## Form generated from reading UI file 'mainyxSYlR.ui'
-##
-## Created by: Qt User Interface Compiler version 6.6.1
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
-
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect, QSize, Qt)
 from PySide6.QtGui import (QCursor, QFont, QIcon)
-from PySide6.QtWidgets import (
-    QComboBox, QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QListWidget, QProgressBar, QPushButton,
-    QRadioButton, QSizePolicy, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
-)
-
+from PySide6.QtWidgets import (QComboBox, QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QListWidget,
+                               QProgressBar, QPushButton, QRadioButton, QSizePolicy, QStackedWidget, QTextEdit,
+                               QVBoxLayout, QWidget)
 from .resources_rc import *
 
 
@@ -940,6 +930,39 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_11.addWidget(self.frame_16, 0, Qt.AlignLeft)
 
+        self.frame_18 = QFrame(self.extraTopMenu)
+        self.frame_18.setObjectName(u"frame_18")
+        self.frame_18.setMinimumSize(QSize(0, 40))
+        self.frame_18.setFrameShape(QFrame.StyledPanel)
+        self.frame_18.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_20 = QHBoxLayout(self.frame_18)
+        self.horizontalLayout_20.setSpacing(10)
+        self.horizontalLayout_20.setObjectName(u"horizontalLayout_20")
+        self.horizontalLayout_20.setContentsMargins(0, 0, 0, 0)
+        self.label_8 = QLabel(self.frame_18)
+        self.label_8.setObjectName(u"label_8")
+
+        self.horizontalLayout_20.addWidget(self.label_8)
+
+        self.export_chat_group_name_list_line_edit = QLineEdit(self.frame_18)
+        self.export_chat_group_name_list_line_edit.setObjectName(u"export_chat_group_name_list_line_edit")
+        self.export_chat_group_name_list_line_edit.setMinimumSize(QSize(175, 0))
+        self.export_chat_group_name_list_line_edit.setReadOnly(True)
+
+        self.horizontalLayout_20.addWidget(self.export_chat_group_name_list_line_edit)
+
+        self.btn_export_chat_group_name_list = QPushButton(self.frame_18)
+        self.btn_export_chat_group_name_list.setObjectName(u"btn_export_chat_group_name_list")
+        self.btn_export_chat_group_name_list.setMinimumSize(QSize(60, 0))
+        self.btn_export_chat_group_name_list.setMaximumSize(QSize(80, 16777215))
+        self.btn_export_chat_group_name_list.setCursor(QCursor(Qt.PointingHandCursor))
+        self.btn_export_chat_group_name_list.setIcon(icon2)
+        self.btn_export_chat_group_name_list.setIconSize(QSize(20, 20))
+
+        self.horizontalLayout_20.addWidget(self.btn_export_chat_group_name_list)
+
+        self.verticalLayout_11.addWidget(self.frame_18, 0, Qt.AlignLeft)
+
         self.verticalLayout_12.addWidget(self.extraTopMenu)
 
         self.extraCenter = QFrame(self.extraContent)
@@ -1733,6 +1756,16 @@ class Ui_MainWindow(object):
         self.export_tag_name_list_line_edit.setPlaceholderText(
             QCoreApplication.translate("MainWindow", u"\u5728\u6b64\u5904\u8f93\u5165\u6807\u7b7e", None))
         self.btn_export_name_list.setText(QCoreApplication.translate("MainWindow", u"\u5bfc\u51fa", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"\u5bfc\u51fa\u7fa4\u804a\u540d\u5355", None))
+        # if QT_CONFIG(tooltip)
+        self.export_chat_group_name_list_line_edit.setToolTip(QCoreApplication.translate("MainWindow",
+                                                                                         u"\u82e5\u83b7\u53d6\u5168\u90e8\u597d\u53cb\u540d\u5355\uff0c\u5219\u8f93\u5165\u5168\u90e8",
+                                                                                         None))
+        # endif // QT_CONFIG(tooltip)
+        self.export_chat_group_name_list_line_edit.setPlaceholderText(
+            QCoreApplication.translate("MainWindow", u"\u70b9\u51fb\u53f3\u4fa7\u5bfc\u51fa\u6309\u94ae\u5373\u53ef",
+                                       None))
+        self.btn_export_chat_group_name_list.setText(QCoreApplication.translate("MainWindow", u"\u5bfc\u51fa", None))
         self.textEdit.setHtml(QCoreApplication.translate("MainWindow",
                                                          u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
                                                          "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"

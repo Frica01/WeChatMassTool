@@ -1727,6 +1727,97 @@ Button */
                   </layout>
                  </widget>
                 </item>
+                <item alignment="Qt::AlignLeft">
+                 <widget class="QFrame" name="frame_18">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_20">
+                   <property name="spacing">
+                    <number>10</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label_8">
+                     <property name="text">
+                      <string>导出群聊名单</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="export_chat_group_name_list_line_edit">
+                     <property name="minimumSize">
+                      <size>
+                       <width>175</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>若获取全部好友名单，则输入全部</string>
+                     </property>
+                     <property name="readOnly">
+                      <bool>true</bool>
+                     </property>
+                     <property name="placeholderText">
+                      <string>点击右侧导出按钮即可</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="btn_export_chat_group_name_list">
+                     <property name="minimumSize">
+                      <size>
+                       <width>60</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>80</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
+                     <property name="text">
+                      <string>导出</string>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../resources.qrc">
+                       <normaloff>:/icons/icons/export.png</normaloff>:/icons/icons/export.png</iconset>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>20</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
                </layout>
               </widget>
              </item>

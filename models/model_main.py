@@ -98,10 +98,20 @@ class GetNameListTask(TaskRunnable):
             exportNameListSignal.emit(False, f'找不到 {tag} 标签')
 
 
+class GetChatGroupNameListTask(TaskRunnable):
+    def execute_task(self):
+        file_path = self.kwargs.get('file_path')
+        exportChatGroupNameListSignal = self.kwargs.get('exportChatGroupNameListSignal')
+        result = self.func()
+        write_file(file_path, data=result)
+        exportChatGroupNameListSignal.emit(True, '文件导出成功')
+
+
 class ModelMain(QObject):
     toggleTaskStatusSignal = Signal(str)
     recordExecInfoSignal = Signal(dict)
     exportNameListSignal = Signal(bool, str)
+    exportChatGroupNameListSignal = Signal(bool, str)
     showInfoBarSignal = Signal(bool, str)
     cacheProgressSignal = Signal(str)
     deleteCacheProgressSignal = Signal(bool)
@@ -132,6 +142,22 @@ class ModelMain(QObject):
             file_path=file_path,
             toggleTaskStatusSignal=self.toggleTaskStatusSignal,
             exportNameListSignal=self.exportNameListSignal
+        )
+        self.thread_pool.start(runnable)
+
+    def export_chat_group_name_list(self, file_path):
+        """导出群聊名单"""
+        task_id = 'chat_group_name_list'
+        if self.task_status_map.get(task_id):
+            return
+        self.toggleTaskStatusSignal.emit(task_id)
+
+        runnable = GetChatGroupNameListTask(
+            self.wx.get_chat_group_name_list,
+            task_id=task_id,
+            file_path=file_path,
+            toggleTaskStatusSignal=self.toggleTaskStatusSignal,
+            exportChatGroupNameListSignal=self.exportChatGroupNameListSignal
         )
         self.thread_pool.start(runnable)
 

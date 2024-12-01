@@ -49,6 +49,7 @@ class ControllerMain(QObject):
         self.view.filesDropped.connect(self.import_send_file_list)
         self.view.btn_import_name_list.clicked.connect(self.import_name_list)
         self.view.btn_export_name_list.clicked.connect(self.export_tag_name_list)
+        self.view.btn_export_chat_group_name_list.clicked.connect(self.export_chat_group_name_list)
         # 导出运行结果
         self.view.btn_export_result.clicked.connect(self.export_exec_result)
         # 添加 文件 QListWidget 控件右键菜单
@@ -56,6 +57,7 @@ class ControllerMain(QObject):
         # 进度条, 导出按钮, 显示信息栏, 缓存进度, 删除缓存进度,的 Signal
         self.view.updatedProgressSignal.connect(self.view.update_progress)
         self.model.exportNameListSignal.connect(self.show_export_msg_box)
+        self.model.exportChatGroupNameListSignal.connect(self.show_export_msg_box)
         self.model.showInfoBarSignal.connect(self.show_infobar)
         self.model.cacheProgressSignal.connect(self.cache_progress)
         self.model.deleteCacheProgressSignal.connect(self.delete_cache_progress)
@@ -128,6 +130,14 @@ class ControllerMain(QObject):
             self.view.set_text_in_widget('export_tag_name_list_line_edit', '')
             self.view.show_message_box('导入失败!', QMessageBox.Critical, duration=3000)
             return
+
+    def export_chat_group_name_list(self):
+        """导出群聊名称"""
+        if file_path := QFileDialog.getSaveFileName(self.view, "Create File", "untitled.txt", "Text Files (*.txt)")[0]:
+            if file_path.endswith('.txt'):
+                # 保存文件
+                # self.model.export_name_list(self.view.export_tag_name_list_line_edit.text(), file_path)
+                self.model.export_chat_group_name_list(file_path)
 
     def on_send_clicked(self):
         """点击发送按钮触发的事件"""

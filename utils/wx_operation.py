@@ -7,7 +7,7 @@
 
 import time
 from copy import deepcopy
-from typing import Iterable
+from typing import Iterable, List
 
 import uiautomation as auto
 
@@ -53,7 +53,8 @@ class WxOperation:
         if not self.visible_flag:
             wake_up_window(class_name=WeChat.WINDOW_CLASSNAME, name=WeChat.WINDOW_NAME)
             self.wx_window = auto.WindowControl(Name=WeChat.WINDOW_NAME, ClassName=WeChat.WINDOW_CLASSNAME)
-            if not self.wx_window.Exists(Interval.MAX_SEARCH_SECOND, searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
+            if not self.wx_window.Exists(Interval.MAX_SEARCH_SECOND,
+                                         searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
                 raise Exception('微信似乎并没有登录!')
             self.input_edit = self.wx_window.EditControl()
             self.visible_flag = bool(self.visible_flag)
@@ -234,6 +235,49 @@ class WxOperation:
         # 简单去重，但是存在误判（如果存在同名的好友), 保持获取时候的顺序
         return list(dict.fromkeys(name_list))
 
+    def get_chat_group_name_list(self, ):
+        """
+        获取微信群聊名称列表.
+
+        Returns:
+            list
+        """
+        # 定位到微信窗口
+        self.locate_wechat_window()
+        # 取消微信窗口置顶
+        self.wx_window.SetTopmost(isTopmost=False)
+        # 点击 通讯录管理
+        self.wx_window.ButtonControl(Name="通讯录").Click(simulateMove=False)
+        self.wx_window.ListControl(Name="联系人").ButtonControl(Name="通讯录管理").Click(simulateMove=False)
+        # 切换到通讯录管理，相当于切换到弹出来的页面
+        contacts_window = auto.GetForegroundControl()
+
+        contacts_window.ButtonControl(Name='最大化').Click(simulateMove=False)
+        contacts_window.ButtonControl(Name="最近群聊").Click(simulateMove=False)
+
+        time.sleep(Interval.BASE_INTERVAL * 2)
+
+        chat_group_name_list = list()
+        last_chat_group_names = None
+        #
+
+        while True:
+            names = [
+                _.TextControl().Name for _ in contacts_window.PaneControl(foundIndex=5).ListControl().GetChildren()
+            ]
+            # 如果滚动前后名单未变，认为到达底部
+            if names == last_chat_group_names:
+                break
+            last_chat_group_names = names
+            # 处理当前页的名单
+            chat_group_name_list.extend(names)
+            # 向下滑动
+            contacts_window.PaneControl(foundIndex=5).WheelDown(wheelTimes=8, waitTime=Interval.BASE_INTERVAL / 2)
+        # 结束时候关闭 "通讯录管理" 窗口
+        contacts_window.SendKey(auto.SpecialKeyNames['ESC'])
+        # 简单去重，但是存在误判（如果存在同名的好友), 保持获取时候的顺序
+        return list(dict.fromkeys(chat_group_name_list))
+
     def get_group_chat_list(self) -> list:
         """获取群聊通讯录中的用户名称"""
         name_list = list()
@@ -315,6 +359,5 @@ class WxOperation:
 
 if __name__ == '__main__':
     wx = WxOperation()
-    data = wx.get_friend_list('无标签')
+    data = wx.get_chat_group_name_list()
     print(data)
-    print(data.__len__())
