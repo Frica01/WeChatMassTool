@@ -2,10 +2,14 @@
 # @Author : Frica01
 # @Time   : 2024/5/12 下午5:22
 # @Name   : window_utils.py
-
+import os
+import subprocess
+import winreg
 
 import win32con
 import win32gui
+
+from utils.process_utils import get_wechat_path
 
 
 def minimize_wechat(class_name, name):
@@ -24,41 +28,26 @@ def minimize_wechat(class_name, name):
         win32gui.SendMessage(hwnd, win32con.WM_CLOSE, 0, 0)
 
 
-def wake_up_window(class_name, name):
-    """
-    唤醒Windows窗口
-
-    Args:
-        name(str):  进程名
-        class_name(str):  进程class_name
-
-    Returns:
-
-    """
-    if hwnd := win32gui.FindWindow(class_name, name):
-        # 恢复窗口
-        win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
-        # 尝试将窗口置前
-        try:
-            win32gui.SetForegroundWindow(hwnd)
-        except Exception as e:
-            print(f"尝试将窗口置前时出错: {e}")
-
-
-def is_window_visible(class_name, name):
-    """
-    唤醒Windows 窗口的可见性
-
-    Args:
-        name(str):  进程名
-        class_name(str):  进程class_name
-
-    Returns:
-
-    """
-    if hwnd := win32gui.FindWindow(class_name, name):
-        # 判断窗口可见性
-        if win32gui.IsWindowVisible(hwnd):
+def wake_up_window(process_name: str = 'Weixin.exe') -> bool:
+    # 方法1：从注册表获取（如果已安装但未运行）
+    try:
+        key = winreg.OpenKey(
+            winreg.HKEY_LOCAL_MACHINE,
+            r"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Weixin"
+        )
+        path, _ = winreg.QueryValueEx(key, "InstallLocation")
+        winreg.CloseKey(key)
+        exe_path = os.path.join(path, process_name)
+        if os.path.exists(exe_path):
+            subprocess.Popen(exe_path)
             return True
-    return False
 
+    except FileNotFoundError:
+        pass
+
+    # 方法2：检查微信进程（如果正在运行）
+    if exe_path := get_wechat_path(proc_name=process_name):
+        subprocess.Popen(exe_path)
+        return True
+
+    return False

@@ -48,8 +48,11 @@ class ControllerMain(QObject):
         self.view.btn_add_file.clicked.connect(self.import_send_file_list)
         self.view.filesDropped.connect(self.import_send_file_list)
         self.view.btn_import_name_list.clicked.connect(self.import_name_list)
-        self.view.btn_export_name_list.clicked.connect(self.export_tag_name_list)
-        self.view.btn_export_chat_group_name_list.clicked.connect(self.export_chat_group_name_list)
+        # self.view.btn_export_name_list.clicked.connect(self.export_tag_name_list) # 停用导出标签
+        self.view.btn_export_name_list.setToolTip("停用啦！")
+        self.view.export_tag_name_list_line_edit.setToolTip("切换3.9的微信和工具使用")
+        self.view.export_tag_name_list_line_edit.setReadOnly(True)
+        # self.view.btn_export_chat_group_name_list.clicked.connect(self.export_chat_group_name_list)   # 停用导出群聊
         # 导出运行结果
         self.view.btn_export_result.clicked.connect(self.export_exec_result)
         # 添加 文件 QListWidget 控件右键菜单

@@ -8,7 +8,7 @@ from typing import Union
 import wmi
 
 
-def get_specific_process(proc_name: str = 'WeChat.exe') -> bool:
+def get_specific_process(proc_name: str = 'Weixin.exe') -> bool:
     """获取指定进程是否存在"""
     return any(process.Name == proc_name for process in wmi.WMI().Win32_Process(Name=proc_name))
 
@@ -20,3 +20,10 @@ def is_process_running(pid: Union[int, str], proc_name: str):
         process.ExecutionState is None and process.Name == proc_name for process in
         wmi.WMI().Win32_Process(ProcessId=pid)
     )
+
+
+def get_wechat_path(proc_name: str = 'Weixin.exe') -> str:
+    c = wmi.WMI()
+    if processes := c.Win32_Process(Name=proc_name):
+        return processes[0].ExecutablePath  # 返回第一个匹配进程的路径
+    return ''

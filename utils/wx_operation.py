@@ -12,7 +12,7 @@ from typing import Iterable, List
 import uiautomation as auto
 
 from config import (WeChat, Interval)
-from utils import (copy_files_to_clipboard, wake_up_window, is_window_visible)
+from utils import (copy_files_to_clipboard, wake_up_window)
 
 
 class WxOperation:
@@ -51,7 +51,8 @@ class WxOperation:
 
     def locate_wechat_window(self):
         if not self.visible_flag:
-            wake_up_window(class_name=WeChat.WINDOW_CLASSNAME, name=WeChat.WINDOW_NAME)
+            wake_up_window(process_name=WeChat.WeChat_PROCESS_NAME)
+            time.sleep(0.5)
             self.wx_window = auto.WindowControl(Name=WeChat.WINDOW_NAME, ClassName=WeChat.WINDOW_CLASSNAME)
             if not self.wx_window.Exists(Interval.MAX_SEARCH_SECOND,
                                          searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
@@ -86,15 +87,23 @@ class WxOperation:
         time.sleep(Interval.BASE_INTERVAL)
         self.wx_window.SendKeys(text='{Ctrl}V', waitTime=Interval.BASE_INTERVAL)
         # 若有匹配结果，第一个元素的类型为PaneControl
-        search_nodes = self.wx_window.ListControl(foundIndex=2).GetChildren()
-        if not isinstance(search_nodes.pop(0), auto.PaneControl):
-            self.wx_window.SendKeys(text='{Esc}', waitTime=Interval.BASE_INTERVAL)
-            raise ValueError("昵称不匹配")
+        search_nodes = self.wx_window.ListControl(foundIndex=1).GetChildren()
+
         # 只考虑全匹配, 不考虑好友昵称重名, 不考虑好友昵称与群聊重名
-        if search_nodes[0].Name == name:
+        if search_nodes[1].Name == name:
             self.wx_window.SendKey(key=auto.SpecialKeyNames['ENTER'], waitTime=Interval.BASE_INTERVAL)
             time.sleep(Interval.BASE_INTERVAL)
             return True
+
+        elif name in ['文件传输助手', '檔案傳輸', 'File Transfer']:
+            for idx, node in enumerate(search_nodes[3:]):
+                if node.Name == name:
+                    for i in range(idx + 1):
+                        auto.SendKey(auto.SpecialKeyNames['DOWN'], waitTime=Interval.BASE_INTERVAL)
+                    auto.SendKey(key=auto.SpecialKeyNames['ENTER'], waitTime=Interval.BASE_INTERVAL)
+                    time.sleep(Interval.BASE_INTERVAL)
+                    return True
+
         # 无匹配用户, 取消搜索框
         self.wx_window.SendKeys(text='{Esc}', waitTime=Interval.BASE_INTERVAL)
         return False
@@ -251,10 +260,9 @@ class WxOperation:
         self.wx_window.ListControl(Name="联系人").ButtonControl(Name="通讯录管理").Click(simulateMove=False)
         # 切换到通讯录管理，相当于切换到弹出来的页面
         contacts_window = auto.GetForegroundControl()
-
         contacts_window.ButtonControl(Name='最大化').Click(simulateMove=False)
-        contacts_window.ButtonControl(Name="最近群聊").Click(simulateMove=False)
 
+        contacts_window.ButtonControl(Name="最近群聊").Click(simulateMove=False)
         time.sleep(Interval.BASE_INTERVAL * 2)
 
         chat_group_name_list = list()
@@ -262,15 +270,15 @@ class WxOperation:
         #
 
         while True:
-            names = [
-                _.TextControl().Name for _ in contacts_window.PaneControl(foundIndex=5).ListControl().GetChildren()
+            names: list[str] = [
+                _.TextControl().Name for _ in contacts_window.PaneControl(foundIndex=4).ListControl().GetChildren()
             ]
             # 如果滚动前后名单未变，认为到达底部
             if names == last_chat_group_names:
                 break
             last_chat_group_names = names
             # 处理当前页的名单
-            chat_group_name_list.extend(names)
+            chat_group_name_list.extend(__iterable=names)
             # 向下滑动
             contacts_window.PaneControl(foundIndex=5).WheelDown(wheelTimes=8, waitTime=Interval.BASE_INTERVAL / 2)
         # 结束时候关闭 "通讯录管理" 窗口
