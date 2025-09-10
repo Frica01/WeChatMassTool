@@ -50,6 +50,7 @@ class WxOperation:
         self.visible_flag: bool = False
 
     def locate_wechat_window(self):
+        """定位微信窗口并设置相关控件"""
         if not self.visible_flag:
             wake_up_window(process_name=WeChat.WeChat_PROCESS_NAME)
             time.sleep(0.5)
@@ -58,7 +59,7 @@ class WxOperation:
                                          searchIntervalSeconds=Interval.MAX_SEARCH_INTERVAL):
                 raise Exception('微信似乎并没有登录!')
             self.input_edit = self.wx_window.EditControl()
-            self.visible_flag = bool(self.visible_flag)
+            self.visible_flag = True  # 简化布尔值赋值
         # 微信窗口置顶
         self.wx_window.SetTopmost(isTopmost=True)
 
@@ -145,16 +146,23 @@ class WxOperation:
             None
         """
 
-        def should_use_clipboard(text: str):
+        def should_use_clipboard(text: str) -> bool:
+            """判断是否应该使用剪贴板发送文本"""
             # 简单的策略：如果文本过长或包含特殊字符，则使用剪贴板
             return len(text) > 30 or not text.isprintable()
 
+        def clear_input():
+            """清空输入框的辅助函数，减少重复代码"""
+            self.input_edit.SendKeys(text='{Ctrl}a', waitTime=wait_time)
+            self.input_edit.SendKey(key=auto.SpecialKeyNames['DELETE'], waitTime=wait_time)
+
         for msg in msgs:
-            assert msg, "发送的文本内容为空"
-            self.input_edit.SendKeys(text='{Ctrl}a', waitTime=wait_time)
-            self.input_edit.SendKey(key=auto.SpecialKeyNames['DELETE'], waitTime=wait_time)
-            self.input_edit.SendKeys(text='{Ctrl}a', waitTime=wait_time)
-            self.input_edit.SendKey(key=auto.SpecialKeyNames['DELETE'], waitTime=wait_time)
+            if not msg:  # 使用更简洁的空值检查
+                raise ValueError("发送的文本内容为空")
+            
+            # 清空输入框（执行两次确保清空）
+            clear_input()
+            clear_input()
 
             if should_use_clipboard(msg):
                 auto.SetClipboardText(text=msg)
@@ -163,7 +171,7 @@ class WxOperation:
             else:
                 self.input_edit.SendKeys(text=msg, waitTime=wait_time * 2)
 
-            # 设置到剪切板再黏贴到输入框
+            # 发送消息
             self.wx_window.SendKeys(text=f'{send_shortcut}', waitTime=wait_time * 2)
 
     def __send_file(self, *file_paths, wait_time, send_shortcut) -> None:
@@ -187,16 +195,8 @@ class WxOperation:
 
             time.sleep(wait_time)  # 等待发送动作完成
 
-    def get_friend_list(self, tag: str = None) -> list:
-        """
-        获取微信好友名称.
-
-        Args:
-            tag(str): 可选参数，如不指定，则获取所有好友
-
-        Returns:
-            list
-        """
+    def _open_contacts_window(self):
+        """打开通讯录管理窗口的通用方法"""
         # 定位到微信窗口
         self.locate_wechat_window()
         # 取消微信窗口置顶
@@ -207,6 +207,19 @@ class WxOperation:
         # 切换到通讯录管理，相当于切换到弹出来的页面
         contacts_window = auto.GetForegroundControl()
         contacts_window.ButtonControl(Name='最大化').Click(simulateMove=False)
+        return contacts_window
+
+    def get_friend_list(self, tag: str = None) -> List[str]:
+        """
+        获取微信好友名称.
+
+        Args:
+            tag(str): 可选参数，如不指定，则获取所有好友
+
+        Returns:
+            list
+        """
+        contacts_window = self._open_contacts_window()
 
         if tag:
             try:
@@ -217,7 +230,7 @@ class WxOperation:
                 contacts_window.SendKey(auto.SpecialKeyNames['ESC'])
                 raise LookupError(f'找不到 {tag} 标签')
 
-        name_list = list()
+        name_list = []
         last_names = None
         while True:
             # TODO 修改成使用 foundIndex 的方式
@@ -244,33 +257,23 @@ class WxOperation:
         # 简单去重，但是存在误判（如果存在同名的好友), 保持获取时候的顺序
         return list(dict.fromkeys(name_list))
 
-    def get_chat_group_name_list(self, ):
+    def get_chat_group_name_list(self) -> List[str]:
         """
         获取微信群聊名称列表.
 
         Returns:
             list
         """
-        # 定位到微信窗口
-        self.locate_wechat_window()
-        # 取消微信窗口置顶
-        self.wx_window.SetTopmost(isTopmost=False)
-        # 点击 通讯录管理
-        self.wx_window.ButtonControl(Name="通讯录").Click(simulateMove=False)
-        self.wx_window.ListControl(Name="联系人").ButtonControl(Name="通讯录管理").Click(simulateMove=False)
-        # 切换到通讯录管理，相当于切换到弹出来的页面
-        contacts_window = auto.GetForegroundControl()
-        contacts_window.ButtonControl(Name='最大化').Click(simulateMove=False)
+        contacts_window = self._open_contacts_window()
 
         contacts_window.ButtonControl(Name="最近群聊").Click(simulateMove=False)
         time.sleep(Interval.BASE_INTERVAL * 2)
 
-        chat_group_name_list = list()
+        chat_group_name_list = []
         last_chat_group_names = None
-        #
 
         while True:
-            names: list[str] = [
+            names: List[str] = [
                 _.TextControl().Name for _ in contacts_window.PaneControl(foundIndex=4).ListControl().GetChildren()
             ]
             # 如果滚动前后名单未变，认为到达底部
@@ -278,7 +281,7 @@ class WxOperation:
                 break
             last_chat_group_names = names
             # 处理当前页的名单
-            chat_group_name_list.extend(__iterable=names)
+            chat_group_name_list.extend(names)  # 简化extend调用
             # 向下滑动
             contacts_window.PaneControl(foundIndex=5).WheelDown(wheelTimes=8, waitTime=Interval.BASE_INTERVAL / 2)
         # 结束时候关闭 "通讯录管理" 窗口

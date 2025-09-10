@@ -7,12 +7,12 @@ import os
 import sys
 import tempfile
 import time
-from typing import Optional
+from typing import Optional, List
 
 import chardet
 
 
-def read_file(file: str):
+def read_file(file: str) -> List[str]:
     """
     读取指定文件的内容，并返回一个由文件各行组成的列表。
 
@@ -27,19 +27,23 @@ def read_file(file: str):
         FileExistsError: 当文件无法访问时抛出。
     """
     try:
-        # 检测文件的编码
+        # 检测文件的编码，只读取前4KB用于检测，提高性能
         with open(file, 'rb') as f:
-            result = chardet.detect(f.read(4096))
+            sample = f.read(4096)
+            result = chardet.detect(sample)
             encoding = result['encoding'] or 'utf-8'
-        with open(file, encoding=encoding) as f:
-            return [line for line in f.read().split('\n') if line.strip()]
-    except (FileNotFoundError, FileExistsError):
-        ...
-    finally:
-        ...
+        
+        # 使用检测到的编码读取文件，使用生成器表达式优化内存使用
+        with open(file, encoding=encoding, errors='ignore') as f:
+            return [line.strip() for line in f if line.strip()]
+    except FileNotFoundError:
+        return []
+    except (PermissionError, OSError) as e:
+        print(f"读取文件时出错 {file}: {e}")
+        return []
 
 
-def write_file(file: str, data: list):
+def write_file(file: str, data: List[str]) -> None:
     """
     将提供的数据写入指定文件。数据应为字符串列表，函数会将其合并为单个字符串并写入文件。
 
@@ -54,16 +58,18 @@ def write_file(file: str, data: list):
     try:
         # 确保文件的父目录存在。如果目录不存在，则递归创建该目录
         directory = os.path.dirname(file)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        # 创建文件
-        with open(file, encoding='utf-8', mode='w') as f:
-            f.write("\n".join(data))
-    except (FileNotFoundError, FileExistsError):
-        ...
+        if directory and not os.path.exists(directory):
+            os.makedirs(directory, exist_ok=True)
+        
+        # 创建文件，使用with语句确保文件正确关闭
+        with open(file, encoding='utf-8', mode='w', errors='ignore') as f:
+            f.write("\n".join(str(line) for line in data))
+    except (PermissionError, OSError) as e:
+        print(f"写入文件时出错 {file}: {e}")
+        raise
 
 
-def get_resource_path(relative_path):
+def get_resource_path(relative_path: str) -> str:
     """
     根据提供的相对路径，返回资源的绝对路径。这个函数特别适用于打包后的应用程序中资源的路径处理。
 
@@ -81,7 +87,7 @@ def get_resource_path(relative_path):
     return join_path(base_path, relative_path)
 
 
-def get_pid():
+def get_pid() -> int:
     """
     返回当前进程id
 
@@ -94,7 +100,7 @@ def get_pid():
     return os.getpid()
 
 
-def get_temp_file_path(file_name: Optional[str] = None):
+def get_temp_file_path(file_name: Optional[str] = None) -> str:
     """
     获取临时文件路径
 
@@ -114,7 +120,7 @@ def get_temp_file_path(file_name: Optional[str] = None):
     return tempfile.gettempdir()
 
 
-def path_exists(path):
+def path_exists(path: str) -> bool:
     """
     判断文件或文件夹是否存在
 
@@ -131,7 +137,7 @@ def path_exists(path):
     return os.path.exists(path)
 
 
-def delete_file(file_path):
+def delete_file(file_path: str) -> bool:
     """
     删除临时文件
 
@@ -146,14 +152,17 @@ def delete_file(file_path):
     Examples:
         >>> delete_file('example.txt')
     """
-
     try:
-        os.remove(file_path)
-    except FileNotFoundError:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            return True
+        return False
+    except (PermissionError, OSError) as e:
+        print(f"删除文件时出错 {file_path}: {e}")
         return False
 
 
-def delete_old_files_with_extension(directory, days=3, file_extension='.tmp'):
+def delete_old_files_with_extension(directory: str, days: int = 3, file_extension: str = '.tmp') -> None:
     """
     删除指定文件夹中超过指定天数前创建的所有文件
 
@@ -172,23 +181,31 @@ def delete_old_files_with_extension(directory, days=3, file_extension='.tmp'):
         print(f"'{directory}' 文件夹不存在")
         return
 
-    # 计算时间阈值
-    cutoff = time.time() - days * 86400  # 86400秒等于1天
+    # 计算时间阈值，使用常量提高可读性
+    SECONDS_PER_DAY = 86400  # 86400秒等于1天
+    cutoff_time = time.time() - days * SECONDS_PER_DAY
 
-    # 遍历文件夹
-    for root, dirs, files in os.walk(directory):
-        for file_name in files:
-            if file_name.endswith(file_extension):
-                file_path = join_path(root, file_name)
-                # 获取文件的创建时间
-                file_ctime = os.path.getctime(file_path)
-                # 如果文件的创建时间早于时间阈值，则删除文件
-                if file_ctime < cutoff:
-                    print(f"Deleting file: {file_path}")  # 打印出删除的文件路径
-                    delete_file(file_path)
+    # 遍历文件夹，优化性能和错误处理
+    try:
+        for root, dirs, files in os.walk(directory):
+            for file_name in files:
+                if file_name.endswith(file_extension):
+                    file_path = join_path(root, file_name)
+                    try:
+                        # 获取文件的创建时间
+                        file_ctime = os.path.getctime(file_path)
+                        # 如果文件的创建时间早于时间阈值，则删除文件
+                        if file_ctime < cutoff_time:
+                            print(f"Deleting file: {file_path}")  # 打印出删除的文件路径
+                            delete_file(file_path)
+                    except (OSError, PermissionError) as e:
+                        print(f"无法处理文件 {file_path}: {e}")
+                        continue
+    except (OSError, PermissionError) as e:
+        print(f"遍历目录时出错 {directory}: {e}")
 
 
-def join_path(*args):
+def join_path(*args: str) -> str:
     """
     连接多个路径组件，生成一个完整的路径
 
