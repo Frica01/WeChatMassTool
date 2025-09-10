@@ -98,25 +98,45 @@ class ControllerMain(QObject):
     # noinspection PyUnresolvedReferences
     def import_name_list(self) -> None:
         """添加昵称清单"""
-        if name_list_file := QFileDialog.getOpenFileName(self.view, '选择文件', '', "Text Files (*.txt)")[0]:
-            self.view.set_text_in_widget('import_name_list_line_edit', name_list_file)
-            self.name_list = read_file(file=name_list_file)
-            self.name_list_file = name_list_file
-            self.view.show_message_box('导入成功!', QMessageBox.Information)
+        name_list_file = QFileDialog.getOpenFileName(self.view, '选择文件', '', "Text Files (*.txt)")[0]
+        
+        if name_list_file:
+            try:
+                self.view.set_text_in_widget('import_name_list_line_edit', name_list_file)
+                self.name_list = read_file(file=name_list_file)
+                self.name_list_file = name_list_file
+                if self.name_list:  # 检查是否成功读取到数据
+                    self.view.show_message_box('导入成功!', QMessageBox.Information)
+                else:
+                    self.view.show_message_box('文件为空或读取失败!', QMessageBox.Warning, duration=3000)
+            except Exception as e:
+                self.view.show_message_box(f'导入失败: {str(e)}', QMessageBox.Critical, duration=3000)
+                self.name_list = []
+                self.view.set_text_in_widget('import_name_list_line_edit', '')
         else:
-            self.name_list = list()
+            # 用户取消了文件选择
+            self.name_list = []
             self.view.set_text_in_widget('import_name_list_line_edit', '')
-            self.view.show_message_box('导入失败!', QMessageBox.Critical, duration=3000)
+        
         # 简单更新progress的数量
         self.update_task_progress()
 
-    def import_send_file_list(self, new_files):
+    def import_send_file_list(self, new_files=None):
         """导入发送名单"""
         if not new_files:
-            new_files = set(QFileDialog.getOpenFileNames(self.view, '选择文件', "All Files (*);;*")[0])
-        curr_files = {self.view.file_list_widget.item(row).text() for row in range(self.view.file_list_widget.count())}
+            file_list = QFileDialog.getOpenFileNames(self.view, '选择文件', "", "All Files (*);;*")[0]
+            new_files = set(file_list) if file_list else set()
+        
+        if not new_files:
+            return  # 用户取消了文件选择或没有选择文件
+            
+        # 获取当前已存在的文件列表
+        curr_files = {self.view.file_list_widget.item(row).text() 
+                     for row in range(self.view.file_list_widget.count())}
+        
         # 计算尚未添加到列表的新文件
-        if files_to_add := (new_files - curr_files):
+        files_to_add = new_files - curr_files
+        if files_to_add:
             self.view.file_list_widget.addItems(files_to_add)
 
     def export_tag_name_list(self):
